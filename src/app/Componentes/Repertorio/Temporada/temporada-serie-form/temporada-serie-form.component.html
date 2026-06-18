@@ -1,0 +1,156 @@
+<div class="scroll-form row">
+  <div class="col-md-6 offset-md-2">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+          <!-- Serie -->
+          <div class="card-body">
+            <div class="input-group">
+              <input type="text" formControlName="Serie" [(ngModel)]="search" placeholder="Serie:" class="form-control"
+                autofocus>
+
+              <select *ngIf="search != null || edit" formControlName="SerieId" [(ngModel)]="temporada.serieId"
+                class="form-control" id="inputGroupSelect01"
+                [class.is-invalid]="form.get('SerieId')?.invalid && form.get('SerieId')?.touched"
+                [class.is-valid]="form.get('SerieId')?.valid">
+                <option selected disabled value=0>Selecciona una Serie</option>
+                <option *ngFor="let item of Series | customGlobalFilter:search" [ngValue]="item.serieId">
+                  {{item.nombre}}</option>
+              </select>
+
+              <button type="button" class="btn btn-primary" (click)="refrescarSerie()" title="Refrescar Series">
+                ↻
+              </button>
+            </div>
+
+            <span *ngIf="form.get('SerieId')?.hasError('noCero') && form.get('SerieId')?.touched">
+              El campo <span class="alerta">Serie</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Temporada -->
+          <div class="card-body">
+            <input type="text" formControlName="Temporada" [(ngModel)]="temporada.nombre" placeholder="Nombre:"
+              class="form-control" [class.is-invalid]="form.get('Temporada')?.invalid && form.get('Temporada')?.touched"
+              [class.is-valid]="form.get('Temporada')?.valid">
+
+            <span *ngIf="form.get('Temporada')?.hasError('required') && form.get('Temporada')?.touched">
+              El campo <span class="alerta">Temporada</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Capitulos -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="Cap" class="input-group-text">Capítulos</label>
+              <input id="Cap" type="number" formControlName="Capitulos" [(ngModel)]="temporada.capitulos"
+                placeholder="Capitulos:" class="form-control"
+                [class.is-invalid]="(form.hasError('Capitulos') || form.get('Capitulos')?.invalid) && form.get('Capitulos')?.touched"
+                [class.is-valid]="form.get('Capitulos')?.valid">
+            </div>
+            <span *ngIf="form.hasError('Capitulos') && form.get('Capitulos')?.touched">
+              El campo <span class="alerta">Capítulos</span> es <strong>Requerido</strong>.
+            </span>
+
+            <span *ngIf="form.get('Capitulos')?.hasError('pattern')">
+              El campo <span class="alerta">Capítulos</span> solo acepta números enteros.
+            </span>
+
+            <span *ngIf="form.get('Capitulos')?.hasError('min')">
+              El campo <span class="alerta">Capítulos</span> debe ser mayor a 0.
+            </span>
+          </div>
+
+          <!-- Calificacion -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="Calificacion" class="input-group-text">Calificación</label>
+              <input id="Calificacion" type="number" formControlName="Calificacion" [(ngModel)]="temporada.calificacion"
+                placeholder="Calificacion:" class="form-control"
+                [class.is-invalid]="(form.hasError('Calificacion') || form.get('Calificacion')?.invalid) && form.get('Calificacion')?.touched"
+                [class.is-valid]="form.get('Calificacion')?.valid">
+            </div>
+            <span *ngIf="form.hasError('Calificacion') && form.get('Calificacion')?.touched">
+              El campo <span class="alerta">Calificación</span> es <strong>Requerido</strong>.
+            </span>
+
+            <span *ngIf="form.get('Calificacion')?.hasError('min')">
+              La <span class="alerta">Calificación</span> no puede ser menor a 0.
+            </span>
+
+            <span *ngIf="form.get('Calificacion')?.hasError('max')">
+              La <span class="alerta">Calificación</span> no puede ser mayor a 10.
+            </span>
+          </div>
+
+          <!-- Fecha Inicio -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="Inicio" class="input-group-text">Fecha de Inicio</label>
+              <input id="Inicio" type="date" [(ngModel)]="temporada.fechaInicio" formControlName="FechaInicio"
+                class="form-control"
+                [class.is-invalid]="form.get('FechaInicio')?.invalid && form.get('FechaInicio')?.touched"
+                [class.is-valid]="form.get('FechaInicio')?.valid" max="9999-12-31" />
+            </div>
+
+            <span *ngIf="form.get('FechaInicio')?.hasError('required') && form.get('FechaInicio')?.touched">
+              El campo <span class="alerta">fecha Inicio</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Fecha Fin -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="Fin" class="input-group-text">Fecha de Fin</label>
+              <input id="Fin" type="date" [(ngModel)]="temporada.fechaFin" formControlName="FechaFin"
+                class="form-control"
+                [class.is-invalid]="(form.get('FechaFin')?.invalid || form.errors?.['fechaFinInvalida']) && form.get('FechaFin')?.touched"
+                [class.is-valid]="form.get('FechaFin')?.valid" />
+            </div>
+
+            <span *ngIf="form.get('FechaFin')?.hasError('required') && form.get('FechaFin')?.touched">
+              El campo <span class="alerta">fecha Fin</span> es <strong>Requerido</strong>.
+            </span>
+            <span
+              *ngIf="form.get('FechaFin')?.hasError('FechaFinMayorQueFechaInicio') || form.errors?.['fechaFinInvalida'] && form.get('FechaFin')?.touched">
+              El campo <span class="alerta">fecha fin</span> debe ser mayor a <strong>Fecha
+                Inicio</strong>.
+            </span>
+          </div>
+
+          <!-- Portada -->
+          <div class="card-body">
+            <input type="url" formControlName="Portada" [(ngModel)]="temporada.portada" placeholder="Portada:"
+              class="form-control" [class.is-invalid]="form.get('Imagen')?.invalid && form.get('Portada')?.touched"
+              [class.is-valid]="form.get('Portada')?.valid">
+
+            <span *ngIf="form.get('Portada')?.hasError('required') && form.get('Portada')?.touched">
+              El campo <span class="alerta">Portada</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Botones -->
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+            <button type="button" class="btn btn-primary" (click)="regresar()">Regresar</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 inicio-card">
+    <div class="card card-body text-center">
+      <img [src]="temporada.portada == '' ? '/assets/noImagen.png' : temporada.portada " class="card-img-top">
+      <h3 style="text-transform: uppercase;">
+        {{temporada.temporadaId}} - {{temporada.serieId == 0 ? 'Serie' : getNombreSerie(temporada.serieId!)}}
+      </h3>
+      <p>{{temporada.nombre == '' ? 'Nombre de la Temporada' : temporada.nombre}}</p>
+      <p>{{temporada.capitulos == 0 ? 'Capitulos' : temporada.capitulos}}</p>
+      <p>{{temporada.calificacion == 0? 'Calificación' : temporada.calificacion}}</p>
+      <p>{{temporada.fechaInicio == ''? 'Fecha Inicio' : (temporada.fechaInicio | date: 'dd / MMMM / yyyy')}}</p>
+      <p>{{temporada.fechaFin == ''? 'Fecha Fin' : (temporada.fechaFin | date: 'dd / MMMM / yyyy')}}</p>
+    </div>
+  </div>
+</div>

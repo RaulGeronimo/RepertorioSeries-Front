@@ -1,0 +1,172 @@
+<section class="gradient-custom">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <div class="text-center mb-4">
+          <h2 class="mb-2">Registrar Usuario</h2>
+          <p>¡Por favor, introduce todos los datos solicitados!</p>
+        </div>
+
+        <div class="card reset-card">
+          <div class="card-body p-4">
+            <form [formGroup]="form" (ngSubmit)="add()">
+
+              <!-- Nombre -->
+              <div class="mb-4">
+                <label class="form-label">Nombre(s)</label>
+                <input class="form-control" id="Nombre" type="text" formControlName="Nombre" [(ngModel)]="user.nombre"
+                  [class.is-invalid]="form.get('Nombre')?.invalid && form.get('Nombre')?.touched"
+                  [class.is-valid]="form.get('Nombre')?.valid && form.get('Nombre')?.touched">
+
+                <span *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+                  El campo <span class="alerta">nombre</span> es <strong>Requerido</strong>.
+                </span>
+              </div>
+
+              <!-- Apellidos -->
+              <div class="row">
+                <!-- Paterno -->
+                <div class="mb-4 col-md-6">
+                  <label class="form-label">Apellido Paterno</label>
+                  <input class="form-control" id="ApellidoPaterno" type="text" formControlName="ApellidoPaterno"
+                    [(ngModel)]="user.apellidoPaterno"
+                    [class.is-invalid]="form.get('ApellidoPaterno')?.invalid && form.get('ApellidoPaterno')?.touched"
+                    [class.is-valid]="form.get('ApellidoPaterno')?.valid && form.get('ApellidoPaterno')?.touched">
+
+                  <span
+                    *ngIf="form.get('ApellidoPaterno')?.hasError('required') && form.get('ApellidoPaterno')?.touched">
+                    El campo <span class="alerta">Apellido Paterno</span> es <strong>Requerido</strong>.
+                  </span>
+                </div>
+
+                <!-- Materno -->
+                <div class="mb-4 col-md-6">
+                  <label class="form-label">Apellido Materno</label>
+                  <input class="form-control" id="ApellidoMaterno" type="text" formControlName="ApellidoMaterno"
+                    [(ngModel)]="user.apellidoMaterno"
+                    [class.is-invalid]="form.get('ApellidoMaterno')?.invalid && form.get('ApellidoMaterno')?.touched"
+                    [class.is-valid]="form.get('ApellidoMaterno')?.valid && form.get('ApellidoMaterno')?.touched">
+
+                  <span
+                    *ngIf="form.get('ApellidoMaterno')?.hasError('required') && form.get('ApellidoMaterno')?.touched">
+                    El campo <span class="alerta">Apellido Materno</span> es <strong>Requerido</strong>.
+                  </span>
+                </div>
+              </div>
+
+              <!-- Fecha Nacimiento -->
+              <div class="mb-4">
+                <label class="form-label">Fecha Nacimiento</label>
+                <input class="form-control" id="FechaNacimiento" type="date" formControlName="FechaNacimiento"
+                  [(ngModel)]="user.fechaNacimiento"
+                  [class.is-invalid]="form.get('FechaNacimiento')?.invalid && form.get('FechaNacimiento')?.touched"
+                  [class.is-valid]="form.get('FechaNacimiento')?.valid && form.get('FechaNacimiento')?.touched"
+                  max="9999-12-31">
+
+                <span *ngIf="form.get('FechaNacimiento')?.hasError('required') && form.get('FechaNacimiento')?.touched">
+                  El campo <span class="alerta">Fecha Nacimiento</span> es <strong>Requerido</strong>.
+                </span>
+              </div>
+
+              <div class="row">
+                <!-- Usuario -->
+                <div class="mb-4 col-md-6">
+                  <label class="form-label">Usuario</label>
+                  <input class="form-control" id="Usuario" type="text" formControlName="Usuario"
+                    [(ngModel)]="user.usuario"
+                    [class.is-invalid]="form.get('Usuario')?.invalid && form.get('Usuario')?.touched"
+                    [class.is-valid]="form.get('Usuario')?.valid && form.get('Usuario')?.touched">
+
+                  <span *ngIf="form.get('Usuario')?.hasError('required') && form.get('Usuario')?.touched">
+                    El campo <span class="alerta">Usuario</span> es <strong>Requerido</strong>.
+                  </span>
+                </div>
+
+                <!-- Correo -->
+                <div class="mb-4 col-md-6">
+                  <label class="form-label">Correo</label>
+                  <input class="form-control" id="Correo" type="text" formControlName="Correo" [(ngModel)]="user.correo"
+                    [class.is-invalid]="form.get('Correo')?.invalid && form.get('Correo')?.touched"
+                    [class.is-valid]="form.get('Correo')?.valid && form.get('Correo')?.touched">
+
+                  <div *ngIf="form.get('Correo')?.touched && form.get('Correo')?.invalid" class="mt-1">
+                    <div *ngIf="form.get('Correo')?.errors?.['required']">
+                      <span>
+                        El campo <span class="alerta">correo</span> es <strong>Requerido</strong>.
+                      </span>
+                    </div>
+                    <div *ngIf="form.get('Correo')?.errors?.['pattern']" class="text-danger">
+                      El correo no tiene un formato válido
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Password -->
+              <div class="mb-4">
+                <label class="form-label">Contraseña</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fas fa-lock"></i>
+                  </span>
+
+                  <input [type]="fieldTextType.password1 ? 'text' : 'password'" class="form-control"
+                    placeholder="Ingresa nueva contraseña" [(ngModel)]="user.password" formControlName="Password"
+                    [class.is-invalid]="form.get('Password')?.invalid && form.get('Password')?.touched"
+                    [class.is-valid]="form.get('Password')?.valid && form.get('Password')?.touched">
+
+                  <span class="input-group-text password-toggle" (click)="toggleFieldTextType('password1')">
+                    <i class="fas" [ngClass]="fieldTextType.password1 ? 'fa-eye-slash' : 'fa-eye'"></i>
+                  </span>
+                </div>
+                <!-- Mensajes de Error -->
+                <div *ngIf="form.get('Password')?.touched && form.get('Password')?.invalid" class="text-danger mt-1">
+                  <div *ngIf="form.get('Password')?.errors?.['required']">
+                    La contraseña es obligatoria
+                  </div>
+                  <div *ngIf="form.get('Password')?.errors?.['minlength']">
+                    La contraseña debe tener al menos 8 caracteres
+                  </div>
+                  <div *ngIf="form.get('Password')?.errors?.['pattern']">
+                    La contraseña debe contener mayúscula, minúscula, número y carácter especial
+                  </div>
+                </div>
+              </div>
+
+              <!-- Confirmar -->
+              <div class="mb-4">
+                <label class="form-label">Confirmar Contraseña</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fas fa-lock"></i>
+                  </span>
+
+                  <input [type]="fieldTextType.password2 ? 'text' : 'password'" class="form-control"
+                    placeholder="Confirma la contraseña" formControlName="Password2"
+                    [class.is-invalid]="form.hasError('mismatch') && form.touched"
+                    [class.is-valid]="form.get('Password2')?.valid && form.get('Password2')?.touched">
+
+                  <span class="input-group-text password-toggle" (click)="toggleFieldTextType('password2')">
+                    <i class="fas" [ngClass]="fieldTextType.password2 ? 'fa-eye-slash' : 'fa-eye'"></i>
+                  </span>
+                </div>
+                <div *ngIf="form.hasError('mismatch') && form.touched" class="text-danger mt-1">
+                  Las contraseñas no coinciden
+                </div>
+              </div>
+
+              <div class="btn-group w-100" role="group" aria-label="Basic mixed styles example">
+                <button [disabled]="form.invalid" class="btn btn-outline-success">
+                  Aceptar
+                </button>
+
+                <a class="btn btn-outline-info" routerLink="/login">Regresar</a>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

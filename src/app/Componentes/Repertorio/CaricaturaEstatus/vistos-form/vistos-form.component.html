@@ -1,0 +1,104 @@
+<div class="scroll-form row">
+  <div class="col-md-6 offset-md-2">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+          <!-- Temporada -->
+          <div class="card-body">
+            <div class="input-group">
+              <input type="text" formControlName="Temporada" [(ngModel)]="search" placeholder="Temporada:"
+                class="form-control" autofocus>
+
+              <select *ngIf="search != null || edit" formControlName="TemporadaId" [(ngModel)]="siguiendo.temporadaId"
+                class="form-control" id="inputGroupSelect01"
+                [class.is-invalid]="form.get('TemporadaId')?.invalid && form.get('TemporadaId')?.touched"
+                [class.is-valid]="form.get('TemporadaId')?.valid" autofocus>
+                <option selected disabled value=0>Selecciona una Caricatura</option>
+                <option *ngFor="let temporada of Temporadas | customGlobalFilter:search"
+                  [ngValue]="temporada.temporadaId">
+                  {{temporada.nombre}}</option>
+              </select>
+
+              <button type="button" class="btn btn-primary" (click)="refrescarTemporadas()"
+                title="Refrescar temporadas">
+                ↻
+              </button>
+            </div>
+
+            <span *ngIf="form.get('TemporadaId')?.hasError('noCero') && form.get('TemporadaId')?.touched">
+              El campo <span class="alerta">Temporada</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Checkbox -->
+          <div class="card-body">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="soloNoVistos" [(ngModel)]="soloNoVistos"
+                [ngModelOptions]="{ standalone: true }" (change)="cambiarFiltroNoVistos()">
+
+              <label class="form-check-label" for="soloNoVistos">
+                Mostrar únicamente no vistos
+              </label>
+            </div>
+          </div>
+
+          <!-- Fecha Inicio -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="Inicio" class="input-group-text">Fecha de Inicio</label>
+              <input id="Inicio" type="date" [(ngModel)]="siguiendo.fechaInicio" formControlName="FechaInicio"
+                class="form-control"
+                [class.is-invalid]="form.get('FechaInicio')?.invalid && form.get('FechaInicio')?.touched"
+                [class.is-valid]="form.get('FechaInicio')?.valid" max="9999-12-31" />
+            </div>
+
+            <span *ngIf="form.get('FechaInicio')?.hasError('required') && form.get('FechaInicio')?.touched">
+              El campo <span class="alerta">fecha Inicio</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Fecha Fin -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="Fin" class="input-group-text">Fecha de Fin</label>
+              <input id="Fin" type="date" [(ngModel)]="siguiendo.fechaFin" formControlName="FechaFin"
+                class="form-control"
+                [class.is-invalid]="(form.get('FechaFin')?.invalid || form.errors?.['fechaFinInvalida']) && form.get('FechaFin')?.touched"
+                [class.is-valid]="form.get('FechaFin')?.valid" />
+            </div>
+
+            <span *ngIf="form.get('FechaFin')?.hasError('required') && form.get('FechaFin')?.touched">
+              El campo <span class="alerta">fecha Fin</span> es <strong>Requerido</strong>.
+            </span>
+            <span
+              *ngIf="form.get('FechaFin')?.hasError('FechaFinMayorQueFechaInicio') || form.errors?.['fechaFinInvalida'] && form.get('FechaFin')?.touched">
+              El campo <span class="alerta">fecha fin</span> debe ser mayor a <strong>Fecha
+                Inicio</strong>.
+            </span>
+          </div>
+
+          <!-- Botones -->
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+            <button *ngIf="!edit" class="btn btn-primary" [routerLink]="['..']">Regresar</button>
+            <button *ngIf="edit" class="btn btn-primary" [routerLink]="['../../']">Regresar</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 inicio-card">
+    <div class="card card-body text-center">
+      <img [src]="siguiendo.temporadaId == 0 ? '/assets/noImagen.png' : getImagenTemporada(siguiendo.temporadaId!)"
+        class="card-img-top">
+      <h3 style="text-transform: uppercase;">
+        {{siguiendo.caricaturaSiguiendoId}} - {{siguiendo.temporadaId == 0 ? 'Temporada' :
+        getNombreTemporada(siguiendo.temporadaId!)}}
+      </h3>
+      <p>{{siguiendo.fechaInicio == ''? 'Fecha Inicio' : (siguiendo.fechaInicio | date: 'dd / MMMM / yyyy')}}</p>
+      <p>{{siguiendo.fechaFin == ''? 'Fecha Fin' : (siguiendo.fechaFin | date: 'dd / MMMM / yyyy')}}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,268 @@
+<div class="scroll-form row">
+  <div class="col-md-6 offset-md-2">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+          <!-- Nombre -->
+          <div class="card-body">
+            <input type="text" formControlName="Nombre" [(ngModel)]="pelicula.nombre" placeholder="Nombre:"
+              class="form-control" [class.is-invalid]="form.get('Nombre')?.invalid && form.get('Nombre')?.touched"
+              [class.is-valid]="form.get('Nombre')?.valid">
+
+            <span *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+              El campo <span class="alerta">Nombre</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Otros Nombres -->
+          <div class="card-body">
+            <textarea type="text" formControlName="OtrosNombres" [(ngModel)]="pelicula.otrosNombres"
+              placeholder="Otros Nombres:" class="form-control"
+              [class.is-invalid]="form.get('OtrosNombres')?.invalid && form.get('OtrosNombres')?.touched"
+              [class.is-valid]="form.get('OtrosNombres')?.valid" rows="2"></textarea>
+
+            <span *ngIf="form.get('OtrosNombres')?.hasError('required') && form.get('OtrosNombres')?.touched">
+              El campo <span class="alerta">Otros Nombres</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Director -->
+          <div class="card-body">
+            <input type="text" formControlName="Director" [(ngModel)]="pelicula.director" placeholder="Director:"
+              class="form-control" [class.is-invalid]="form.get('Director')?.invalid && form.get('Director')?.touched"
+              [class.is-valid]="form.get('Director')?.valid">
+
+            <span *ngIf="form.get('Director')?.hasError('required') && form.get('Director')?.touched">
+              El campo <span class="alerta">Director</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Estreno -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="Estreno" class="input-group-text">Estreno</label>
+              <input id="Estreno" type="date" [(ngModel)]="pelicula.estreno" formControlName="Estreno"
+                class="form-control" [class.is-invalid]="form.get('Estreno')?.invalid && form.get('Estreno')?.touched"
+                [class.is-valid]="form.get('Estreno')?.valid" max="9999-12-31" />
+            </div>
+
+            <span *ngIf="form.get('Estreno')?.hasError('required') && form.get('Estreno')?.touched">
+              El campo <span class="alerta">Estreno</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Estreno Mexico -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="Mexico" class="input-group-text">Estreno México</label>
+              <input id="Mexico" type="date" [(ngModel)]="pelicula.estrenoMexico" formControlName="EstrenoMexico"
+                class="form-control"
+                [class.is-invalid]="form.get('EstrenoMexico')?.invalid && form.get('EstrenoMexico')?.touched"
+                [class.is-valid]="form.get('EstrenoMexico')?.valid" max="9999-12-31" />
+            </div>
+
+            <span *ngIf="form.get('EstrenoMexico')?.hasError('required') && form.get('EstrenoMexico')?.touched">
+              El campo <span class="alerta">Estreno México</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Calificacion -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="Calificacion" class="input-group-text">Calificación</label>
+              <input id="Calificacion" type="number" formControlName="Calificacion" [(ngModel)]="pelicula.calificacion"
+                placeholder="Calificacion:" class="form-control"
+                [class.is-invalid]="(form.hasError('Calificacion') || form.get('Calificacion')?.invalid) && form.get('Calificacion')?.touched"
+                [class.is-valid]="form.get('Calificacion')?.valid">
+            </div>
+
+            <span *ngIf="form.hasError('Calificacion') && form.get('Calificacion')?.touched">
+              El campo <span class="alerta">Calificación</span> es <strong>Requerido</strong>.
+            </span>
+            <span *ngIf="form.get('Calificacion')?.hasError('min')">
+              La <span class="alerta">Calificación</span> no puede ser menor a 0.
+            </span>
+            <span *ngIf="form.get('Calificacion')?.hasError('max')">
+              La <span class="alerta">Calificación</span> no puede ser mayor a 10.
+            </span>
+          </div>
+
+          <!-- Genero -->
+          <div class="card-body">
+            <textarea type="text" formControlName="Genero" [(ngModel)]="pelicula.genero" placeholder="Genero:"
+              class="form-control" [class.is-invalid]="form.get('Genero')?.invalid && form.get('Genero')?.touched"
+              [class.is-valid]="form.get('Genero')?.valid" rows="2"></textarea>
+
+            <span *ngIf="form.get('Genero')?.hasError('required') && form.get('Genero')?.touched">
+              El campo <span class="alerta">Género</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Duracion -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="Duracion" class="input-group-text">Duracion</label>
+              <input id="Duracion" type="time" formControlName="Duracion" [(ngModel)]="pelicula.duracion"
+                placeholder="Duracion:" class="form-control"
+                [class.is-invalid]="form.get('Duracion')?.invalid && form.get('Duracion')?.touched"
+                [class.is-valid]="form.get('Duracion')?.valid">
+            </div>
+            <span *ngIf="form.get('Duracion')?.hasError('required') && form.get('Duracion')?.touched">
+              El campo <span class="alerta">Duracion</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Clasificacion -->
+          <div class="card-body">
+            <div class="input-group">
+              <label class="input-group-text" for="ClasificacionId">Clasificación</label>
+              <select formControlName="ClasificacionId" [(ngModel)]="pelicula.clasificacionId" class="form-control"
+                id="ClasificacionId"
+                [class.is-invalid]="form.get('ClasificacionId')?.invalid && form.get('ClasificacionId')?.touched"
+                [class.is-valid]="form.get('ClasificacionId')?.valid">
+                <option selected disabled value=0>Selecciona una Clasificación</option>
+                <option *ngFor="let clasificacion of Clasificaciones" [ngValue]="clasificacion.ClasificacionId">
+                  {{clasificacion.Clasificacion}}</option>
+              </select>
+            </div>
+
+            <span *ngIf="form.get('ClasificacionId')?.hasError('noCero') && form.get('ClasificacionId')?.touched">
+              El campo <span class="alerta">Clasificación</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Productora -->
+          <div class="card-body">
+            <textarea type="text" formControlName="Productora" [(ngModel)]="pelicula.productora"
+              placeholder="Productora:" class="form-control"
+              [class.is-invalid]="form.get('Productora')?.invalid && form.get('Productora')?.touched"
+              [class.is-valid]="form.get('Productora')?.valid" rows="2"></textarea>
+
+            <span *ngIf="form.get('Productora')?.hasError('required') && form.get('Productora')?.touched">
+              El campo <span class="alerta">Productora</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Distribuidora -->
+          <div class="card-body">
+            <textarea type="text" formControlName="Distribuidora" [(ngModel)]="pelicula.distribuidora"
+              placeholder="Distribuidora:" class="form-control"
+              [class.is-invalid]="form.get('Distribuidora')?.invalid && form.get('Distribuidora')?.touched"
+              [class.is-valid]="form.get('Distribuidora')?.valid" rows="2"></textarea>
+
+            <span *ngIf="form.get('Distribuidora')?.hasError('required') && form.get('Distribuidora')?.touched">
+              El campo <span class="alerta">Distribuidora</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Portada -->
+          <div class="card-body">
+            <input type="url" formControlName="Portada" [(ngModel)]="pelicula.portada" placeholder="Portada:"
+              class="form-control" [class.is-invalid]="form.get('Portada')?.invalid && form.get('Portada')?.touched"
+              [class.is-valid]="form.get('Portada')?.valid">
+
+            <span *ngIf="form.get('Portada')?.hasError('required') && form.get('Portada')?.touched">
+              El campo <span class="alerta">Portada</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Tipo Relacion -->
+          <div class="card-body">
+            <label class="form-label fw-bold">Pertenece a:</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="tipoNinguna" name="tipoRelacion" value="ninguna"
+                  [(ngModel)]="tipoRelacion" [ngModelOptions]="{standalone: true}" (change)="onTipoRelacionChange()">
+                <label class="form-check-label" for="tipoNinguna">Ninguna</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="tipoSerie" name="tipoRelacion" value="serie"
+                  [(ngModel)]="tipoRelacion" [ngModelOptions]="{standalone: true}" (change)="onTipoRelacionChange()">
+                <label class="form-check-label" for="tipoSerie">Serie</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="tipoCaricatura" name="tipoRelacion" value="caricatura"
+                  [(ngModel)]="tipoRelacion" [ngModelOptions]="{standalone: true}" (change)="onTipoRelacionChange()">
+                <label class="form-check-label" for="tipoCaricatura">Caricatura</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Select Series -->
+          <div class="card-body" *ngIf="tipoRelacion === 'serie'">
+            <div class="input-group">
+              <input type="text" formControlName="Serie" [(ngModel)]="searchSerie" placeholder="Buscar Serie:"
+                class="form-control" autofocus>
+              <select *ngIf="searchSerie != null || edit" formControlName="SerieId" [(ngModel)]="pelicula.serieId"
+                class="form-control" id="SerieId"
+                [class.is-invalid]="form.get('SerieId')?.invalid && form.get('SerieId')?.touched"
+                [class.is-valid]="form.get('SerieId')?.valid">
+                <option disabled [value]="0">Selecciona una Serie</option>
+                <option *ngFor="let serie of Series | customGlobalFilter:searchSerie" [ngValue]="serie.serieId">
+                  {{ serie.nombre }}
+                </option>
+              </select>
+            </div>
+            <span *ngIf="form.get('SerieId')?.hasError('noCero') && form.get('SerieId')?.touched">
+              El campo <span class="alerta">Serie</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Select Caricaturas -->
+          <div class="card-body" *ngIf="tipoRelacion === 'caricatura'">
+            <div class="input-group">
+              <input type="text" formControlName="Caricatura" [(ngModel)]="searchCaricatura"
+                placeholder="Buscar Caricatura:" class="form-control" autofocus>
+              <select *ngIf="searchCaricatura != null || edit" formControlName="CaricaturaId"
+                [(ngModel)]="pelicula.caricaturaId" class="form-control" id="CaricaturaId"
+                [class.is-invalid]="form.get('CaricaturaId')?.invalid && form.get('CaricaturaId')?.touched"
+                [class.is-valid]="form.get('CaricaturaId')?.valid">
+                <option disabled [value]="0">Selecciona una Caricatura</option>
+                <option *ngFor="let caricatura of Caricaturas | customGlobalFilter:searchCaricatura"
+                  [ngValue]="caricatura.caricaturaId">
+                  {{ caricatura.nombre }}
+                </option>
+              </select>
+            </div>
+            <span *ngIf="form.get('CaricaturaId')?.hasError('noCero') && form.get('CaricaturaId')?.touched">
+              El campo <span class="alerta">Caricatura</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Botones -->
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+            <button type="button" class="btn btn-primary" (click)="regresar()">Regresar</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel derecho -->
+  <div class="col-md-4 inicio-card">
+    <div class="card card-body text-center">
+      <img [src]="pelicula.portada == '' ? '/assets/noImagen.png' : pelicula.portada" class="card-img-top">
+      <h3 style="text-transform: uppercase;">
+        {{pelicula.peliculaId}} - {{pelicula.nombre == '' ? 'Pelicula' : pelicula.nombre}}
+      </h3>
+      <p>{{pelicula.otrosNombres == '' ? 'Otros Nombres' : pelicula.otrosNombres}}</p>
+      <p>{{pelicula.director == '' ? 'Director' : pelicula.director}}</p>
+      <p>{{pelicula.estreno == '' ? 'Fecha Estreno' : (pelicula.estreno | date: 'dd / MMMM / yyyy')}}</p>
+      <p>{{pelicula.estrenoMexico == '' ? 'Estreno México' : (pelicula.estrenoMexico | date: 'dd / MMMM / yyyy')}}</p>
+      <p>{{pelicula.calificacion == 0 ? 'Calificación' : pelicula.calificacion}}</p>
+      <p>{{pelicula.genero == '' ? 'Género' : pelicula.genero}}</p>
+      <p>{{pelicula.duracion == '' ? 'Duración' : pelicula.duracion}}</p>
+      <p>{{pelicula.clasificacionId == 0 ? 'Clasificación' : getNombreClasificacion(pelicula.clasificacionId!)}}</p>
+      <p>{{pelicula.productora == '' ? 'Productora' : pelicula.productora}}</p>
+      <p>{{pelicula.distribuidora == '' ? 'Distribuidora' : pelicula.distribuidora}}</p>
+      <p>
+        {{ tipoRelacion === 'serie' ? getNombreSerie(pelicula.serieId!) :
+        tipoRelacion === 'caricatura' ? getNombreCaricatura(pelicula.caricaturaId!) :
+        'Película Original' }}
+      </p>
+    </div>
+  </div>
+</div>

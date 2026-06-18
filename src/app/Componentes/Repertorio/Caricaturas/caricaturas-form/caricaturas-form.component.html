@@ -1,0 +1,140 @@
+<div class="scroll-form row">
+  <div class="col-md-6 offset-md-2">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+          <!-- Nombre -->
+          <div class="card-body">
+            <input type="text" formControlName="Nombre" [(ngModel)]="caricatura.nombre" placeholder="Nombre:"
+              class="form-control" autofocus
+              [class.is-invalid]="form.get('Nombre')?.invalid && form.get('Nombre')?.touched"
+              [class.is-valid]="form.get('Nombre')?.valid">
+
+            <span *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+              El campo <span class="alerta">Nombre</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Otros Nombres -->
+          <div class="card-body">
+            <textarea type="text" formControlName="OtrosNombres" [(ngModel)]="caricatura.otrosNombres"
+              placeholder="Otros Nombres:" class="form-control"
+              [class.is-invalid]="form.get('OtrosNombres')?.invalid && form.get('OtrosNombres')?.touched"
+              [class.is-valid]="form.get('OtrosNombres')?.valid" rows="2"></textarea>
+
+            <span *ngIf="form.get('OtrosNombres')?.hasError('required') && form.get('OtrosNombres')?.touched">
+              El campo <span class="alerta">Otros Nombres</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Creador -->
+          <div class="card-body">
+            <textarea type="text" formControlName="Creador" [(ngModel)]="caricatura.creador" placeholder="Creador:"
+              class="form-control" [class.is-invalid]="form.get('Creador')?.invalid && form.get('Creador')?.touched"
+              [class.is-valid]="form.get('Creador')?.valid" rows="2"></textarea>
+
+            <span *ngIf="form.get('Creador')?.hasError('required') && form.get('Creador')?.touched">
+              El campo <span class="alerta">Creador</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Genero -->
+          <div class="card-body">
+            <textarea type="text" formControlName="Genero" [(ngModel)]="caricatura.genero" placeholder="Genero:"
+              class="form-control" [class.is-invalid]="form.get('Genero')?.invalid && form.get('Genero')?.touched"
+              [class.is-valid]="form.get('Genero')?.valid" rows="2"></textarea>
+
+            <span *ngIf="form.get('Genero')?.hasError('required') && form.get('Genero')?.touched">
+              El campo <span class="alerta">Género</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Productora -->
+          <div class="card-body">
+            <textarea type="text" formControlName="Productora" [(ngModel)]="caricatura.productora"
+              placeholder="Productora:" class="form-control"
+              [class.is-invalid]="form.get('Productora')?.invalid && form.get('Productora')?.touched"
+              [class.is-valid]="form.get('Productora')?.valid" rows="2"></textarea>
+
+            <span *ngIf="form.get('Productora')?.hasError('required') && form.get('Productora')?.touched">
+              El campo <span class="alerta">Productora</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Distribuidora -->
+          <div class="card-body">
+            <textarea type="text" formControlName="Distribuidora" [(ngModel)]="caricatura.distribuidora"
+              placeholder="Distribuidora:" class="form-control"
+              [class.is-invalid]="form.get('Distribuidora')?.invalid && form.get('Distribuidora')?.touched"
+              [class.is-valid]="form.get('Distribuidora')?.valid" rows="2"></textarea>
+
+            <span *ngIf="form.get('Distribuidora')?.hasError('required') && form.get('Distribuidora')?.touched">
+              El campo <span class="alerta">Distribuidora</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Difusion -->
+          <div class="card-body">
+            <textarea type="text" formControlName="Difusion" [(ngModel)]="caricatura.difusion" placeholder="Difusion:"
+              class="form-control" [class.is-invalid]="form.get('Difusion')?.invalid && form.get('Difusion')?.touched"
+              [class.is-valid]="form.get('Difusion')?.valid" rows="2"></textarea>
+
+            <span *ngIf="form.get('Difusion')?.hasError('required') && form.get('Difusion')?.touched">
+              El campo <span class="alerta">Difusión</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Duracion -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="Duracion" class="input-group-text">Duración</label>
+              <input id="Duracion" type="time" formControlName="Duracion" [(ngModel)]="caricatura.duracion"
+                placeholder="Duracion:" class="form-control"
+                [class.is-invalid]="form.get('Duracion')?.invalid && form.get('Duracion')?.touched"
+                [class.is-valid]="form.get('Duracion')?.valid">
+            </div>
+            <span *ngIf="form.get('Duracion')?.hasError('required') && form.get('Duracion')?.touched">
+              El campo <span class="alerta">Duracion</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Portada -->
+          <div class="card-body">
+            <input type="url" formControlName="Portada" [(ngModel)]="caricatura.portada" placeholder="Portada:"
+              class="form-control" [class.is-invalid]="form.get('Portada')?.invalid && form.get('Portada')?.touched"
+              [class.is-valid]="form.get('Portada')?.valid">
+
+            <span *ngIf="form.get('Portada')?.hasError('required') && form.get('Portada')?.touched">
+              El campo <span class="alerta">Portada</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Botones -->
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+            <button *ngIf="!edit" class="btn btn-primary" [routerLink]="['..']">Regresar</button>
+            <button *ngIf="edit" class="btn btn-primary" [routerLink]="['../../']">Regresar</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 inicio-card">
+    <div class="card card-body text-center">
+      <img [src]="caricatura.portada == '' ? '/assets/noImagen.png' : caricatura.portada" class="card-img-top">
+      <h3 style="text-transform: uppercase;">
+        {{caricatura.caricaturaId}} - {{caricatura.nombre == '' ? 'Nombre de la Caricatura' : caricatura.nombre}}
+      </h3>
+      <p>{{caricatura.otrosNombres == ''? 'Otros Nombres' : caricatura.otrosNombres}}</p>
+      <p>{{caricatura.creador == ''? 'Creador' : caricatura.creador}}</p>
+      <p>{{caricatura.genero == ''? 'Género' : caricatura.genero}}</p>
+      <p>{{caricatura.productora == ''? 'Productora' : caricatura.productora}}</p>
+      <p>{{caricatura.distribuidora == ''? 'Distribuidora' : caricatura.distribuidora}}</p>
+      <p>{{caricatura.difusion == ''? 'Difusión' : caricatura.difusion}}</p>
+      <p>{{caricatura.duracion == ''? 'Duración' : caricatura.duracion}}</p>
+    </div>
+  </div>
+</div>

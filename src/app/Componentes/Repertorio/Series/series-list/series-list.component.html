@@ -1,0 +1,228 @@
+<div class="inicio-card input-group flex-nowrap">
+  <div class="dropdown"
+    *ngIf="permiso.puedeCrear(Seccion.Serie) || permiso.puedeCrear(Seccion.TemporadaSerie)">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      Agregar
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.Serie)" [routerLink]="['agregar']">Serie</a>
+      </li>
+      <li>
+        <a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.TemporadaSerie)" [routerLink]="['/repertorio/temporadasSerie/agregar']">Temporada</a>
+      </li>
+    </ul>
+  </div>
+
+  <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-magnifying-glass"></i></span>
+  <input *ngIf="!tabla" #inputMaterial matInput placeholder="Buscar" class="form-control bg-dark text-white mb-2"
+    (keyup)="applyFilter($event)" autofocus>
+
+  <input *ngIf="tabla" type="text" class="form-control bg-dark text-white mb-2" placeholder="Buscar"
+    [(ngModel)]="search" autofocus>
+
+  <a *ngIf="tabla" type="button" class="btn btn-light" (click)="cambiarVista()">
+    <i class="fa-solid fa-list"></i>
+  </a>
+  <a *ngIf="!tabla" type="button" class="btn btn-light" (click)="cambiarVista()">
+    <i class="fa-solid fa-table"></i>
+  </a>
+
+  <app-export-button [action]="export.bind(this)" color="success" [outline]="true"
+    extraClass="me-2"></app-export-button>
+</div>
+
+<label *ngIf="tabla">Total: {{ (Series | customGlobalFilter:search).length }} registros</label>
+
+<div class="container-scroll row" [hidden]="!tabla">
+  <div class="col-md-4" *ngFor="let dato of Series | customGlobalFilter:search" style="margin-bottom: 1.5rem;">
+    <div class="card text-center">
+      <div class="card-header text-white d-flex justify-content-between align-items-center {{dato.estado}}"
+        [ngStyle]="{ 'border': show ? 'none' : '' }">
+        {{dato.nombre}}
+
+        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+          <button *ngIf="permiso.puedeEliminar(Seccion.Serie)" class="btn btn-danger"
+            (click)="borrar(dato.serieId)">
+            <i class="far fa-trash-alt"></i>
+          </button>
+
+          <button *ngIf="permiso.puedeVer(Seccion.TemporadaSerie)"
+            [routerLink]="['/repertorio/buscar/serie', dato.serieId]" class="btn btn-success btn-block">
+            <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
+          </button>
+
+          <button *ngIf="!show" class="btn btn-primary" (click)="show = !show">
+            <i class="fa-solid fa-circle-info"></i>
+          </button>
+          <button *ngIf="show" class="btn btn-primary" (click)="show = !show">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="box">
+        <div [id]="'carousel-' + dato.serieId" class="carousel slide box" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div *ngFor="let portada of dato.portadasArray; let i = index" class="carousel-item"
+              [class.active]="i === 0">
+              <img [src]="portada" alt="Portada de la Serie" loading="lazy">
+            </div>
+          </div>
+
+          <!-- Flecha izquierda -->
+          <button *ngIf="dato.portadasArray.length > 1" class="carousel-control-prev" type="button"
+            [attr.data-bs-target]="'#carousel-' + dato.serieId" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+
+          <!-- Flecha derecha -->
+          <button *ngIf="dato.portadasArray.length > 1" class="carousel-control-next" type="button"
+            [attr.data-bs-target]="'#carousel-' + dato.serieId" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+
+      </div>
+      <div class="card-body {{dato.estado}}" *ngIf="show">
+         <p style="font-weight: bold;">Películas</p>
+        <p>{{dato.peliculas}}</p>
+        <p style="font-weight: bold;">Temporadas</p>
+        <p>{{dato.temporadas}}</p>
+        <p style="font-weight: bold;">Capítulos</p>
+        <p>{{dato.capitulos}}</p>
+        <p style="font-weight: bold;">Primera Emisión</p>
+        <p>{{dato.fechaInicio | date: 'dd / MMMM / yyyy'}}</p>
+        <p style="font-weight: bold;">Ultima Emisión</p>
+        <p>{{dato.fechaFin | date: 'dd / MMMM / yyyy'}}</p>
+        <p style="font-weight: bold;">Género</p>
+        <p>{{dato.genero}}</p>
+        <p style="font-weight: bold;">Calificación</p>
+        <p>{{dato.promedio}}</p>
+
+        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+          <a *ngIf="permiso.puedeEditar(Seccion.Serie)" [routerLink]="['actualizar', dato.serieId]"
+            class="btn btn-info btn-block"><i class="fa-solid fa-pen-to-square"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabla -->
+<div [hidden]="tabla">
+  <div class="container-scroll">
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="serieId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.serieId }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.nombre }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="otrosNombres">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Otros Nombres</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.otrosNombres }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="genero">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Género</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.genero }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="peliculas">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Películas</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.peliculas}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="temporadas">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Temporadas</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.temporadas}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="capitulos">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Capítulos</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.capitulos }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaInicio">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Primera Emisión</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.fechaInicio | date: 'dd / MMMM / yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaFin">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Última Emisión</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.fechaFin | date: 'dd / MMMM / yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.estado }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="promedio">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Calificación</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.promedio }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="creador">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Creador</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.creador }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="duracion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Duración</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.duracion }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="difusion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Difusión</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.difusion }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="productora">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Productora</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.productora }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="distribuidora">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Distribuidora</th>
+          <td mat-cell *matCellDef="let dato">{{ dato.distribuidora }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let dato">
+            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+              <a *ngIf="permiso.puedeEditar(Seccion.Serie)" [routerLink]="['actualizar', dato.serieId]"
+                class="btn btn-info btn-block"><i class="fa-solid fa-pen-to-square"></i>
+              </a>
+
+              <button *ngIf="permiso.puedeVer(Seccion.TemporadaSerie)"
+                [routerLink]="['/repertorio/buscar/serie', dato.serieId]" class="btn btn-success btn-block">
+                <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
+              </button>
+
+              <button *ngIf="permiso.puedeEliminar(Seccion.Serie)" class="btn btn-danger"
+                (click)="borrar(dato.serieId)">
+                <i class="far fa-trash-alt"></i>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <p *ngIf="dataSource.data.length === 0" class="text-center">No hay Series registradas.</p>
+    </div>
+  </div>
+  <div class="paginator-container">
+    <mat-paginator [pageSize]="pageSize"></mat-paginator>
+  </div>
+</div>

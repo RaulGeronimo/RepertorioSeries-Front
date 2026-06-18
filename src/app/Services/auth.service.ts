@@ -1,0 +1,204 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { User } from '../Models/User';
+import { Observable, interval, Subscription } from 'rxjs';
+import { AlertasService } from './alertas.service';
+import { Router } from '@angular/router';
+import { Permiso } from '../Models/Permisos';
+
+export interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  expiraEn: string;
+  permisos: Permiso[];
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthService {
+  API_URI = `${environment.apiUrl}/Auth`;
+  private tokenCheckInterval: Subscription | null = null;
+
+  constructor(
+    private http: HttpClient,
+    private alerta: AlertasService,
+    private router: Router,
+  ) {
+    this.verificarExpiracionInicial();
+    console.log(environment.apiUrl);
+  }
+
+  create(user: User) {
+    return this.http.post(`${this.API_URI}`, user);
+  }
+
+  login(usuario: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.API_URI}/login`, {
+      usuario,
+      password,
+    });
+  }
+
+  //#region Metodos
+  logout() {
+    localStorage.clear();
+    if (this.tokenCheckInterval) {
+      this.tokenCheckInterval.unsubscribe();
+      this.tokenCheckInterval = null;
+    }
+    this.router.navigate(['login']);
+  }
+
+  guardarTokens(accessToken: string, refreshToken: string, expiraEn: string) {
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('expiraEn', expiraEn);
+    this.iniciarChequeoExpiracion();
+  }
+
+  obtenerToken(): string | null {
+    return localStorage.getItem('accessToken');
+  }
+
+  estaAutenticado(): boolean {
+    return !!this.obtenerToken();
+  }
+
+  guardarPermisos(permisos: Permiso[]) {
+    localStorage.setItem('permisos', JSON.stringify(permisos));
+    localStorage.setItem('usuarioId', permisos[0].usuarioId.toString());
+    localStorage.setItem('rolId', permisos[0].rolId.toString());
+  }
+
+  obtenerPermisos(): Permiso[] {
+    const permisos = localStorage.getItem('permisos');
+    return permisos ? JSON.parse(permisos) : [];
+  }
+
+  tienePermiso(seccion: string, permiso: keyof Permiso): boolean {
+    const permisos = this.obtenerPermisos();
+    const seccionEncontrada = permisos.find((p) => p.seccion === seccion);
+    return !!seccionEncontrada?.[permiso];
+  }
+
+  guardarUsuario(usuario: string) {
+    localStorage.setItem('usuario', usuario);
+  }
+
+  obtenerUsuario(): string | null {
+    return localStorage.getItem('usuario');
+  }
+
+  getUsuarioId(): number | null {
+    const id = localStorage.getItem('usuarioId');
+    return id ? +id : null; // convierte el string a número
+  }
+
+  getRolId(): number | null {
+    const id = localStorage.getItem('rolId');
+    return id ? +id : null; // convierte el string a número
+  }
+
+  private iniciarChequeoExpiracion() {
+    if (this.tokenCheckInterval) {
+      this.tokenCheckInterval.unsubscribe();
+    }
+
+    this.tokenCheckInterval = interval(1000).subscribe(() => {
+      const expiraEn = localStorage.getItem('expiraEn');
+      if (!expiraEn) return;
+
+      const expiracion = new Date(expiraEn).getTime();
+      const ahora = new Date().getTime();
+      const diferencia = expiracion - ahora;
+
+      if (diferencia <= 0) {
+        this.logout();
+        this.alerta.mostrarAlertaSimple(
+          'Sesión Expirada',
+          'Tu sesión ha terminado.',
+          'info',
+        );
+      } else if (diferencia <= 5000) {
+        this.tokenCheckInterval?.unsubscribe(); // Evita múltiples alertas
+        this.mostrarAlertaRenovacion();
+      }
+    });
+  }
+
+  private mostrarAlertaRenovacion() {
+    this.alerta
+      .mostrarAlertaConfirmacion(
+        '¿Deseas continuar en la sesión?',
+        'Tu sesión está por expirar.',
+        'Sí, continuar',
+        'No, cerrar sesión',
+      )
+      .then((result) => {
+        if (result) {
+          this.renovarToken();
+        } else {
+          this.logout();
+        }
+      });
+  }
+
+  private renovarToken() {
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    if (!accessToken || !refreshToken) {
+      this.logout();
+      return;
+    }
+
+    this.http
+      .post<LoginResponse>(`${this.API_URI}/refresh-token`, {
+        accessToken,
+        refreshToken,
+      })
+      .subscribe({
+        next: (res) => {
+          this.guardarTokens(res.accessToken, res.refreshToken, res.expiraEn);
+          if (res.permisos) this.guardarPermisos(res.permisos);
+
+          this.alerta.mostrarAlertaSimple(
+            'Sesión renovada',
+            'Tu sesión ha sido extendida.',
+            'success',
+          );
+          this.iniciarChequeoExpiracion();
+        },
+        error: () => {
+          this.logout();
+          this.alerta.mostrarAlertaSimple(
+            'Sesión finalizada',
+            'No se pudo renovar el token.',
+            'error',
+          );
+        },
+      });
+  }
+
+  private verificarExpiracionInicial() {
+    const expiraEn = localStorage.getItem('expiraEn');
+    if (!expiraEn) return;
+
+    const expiracion = new Date(expiraEn).getTime();
+    const ahora = new Date().getTime();
+
+    if (expiracion <= ahora) {
+      this.logout();
+      this.alerta.mostrarAlertaSimple(
+        'Sesión expirada',
+        'Tu sesión ha expirado. Por favor inicia sesión nuevamente.',
+        'info',
+      );
+    } else {
+      this.iniciarChequeoExpiracion();
+    }
+  }
+  //#endregion Metodos
+}

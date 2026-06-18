@@ -1,0 +1,15 @@
+<footer class="bg-dark text-center text-white">
+  <div class="container p-4 pb-0">
+    <section class="mb-4">
+      <a class="btn btn-outline-light btn-floating m-1" *ngFor="let item of navigation" [href]="item.ruta" role="button"
+        target="_blank">
+        <i [class]="item.icono"></i>
+      </a>
+    </section>
+  </div>
+
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    © 2026 Todos los derechos Reservados:
+    <a class="text-white" href="/">Repertorio de Series Versión 3.0</a>
+  </div>
+</footer>

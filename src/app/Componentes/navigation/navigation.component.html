@@ -1,0 +1,133 @@
+<nav class="navbar navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" [routerLink]="['..']">
+      <img src="favicon.ico" alt="Logo" height="22" class="d-inline-block align-text-top">
+      Repertorio Series
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
+      aria-controls="offcanvasDarkNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
+      aria-labelledby="offcanvasDarkNavbarLabel">
+      <div class="offcanvas-header custom-offcanvas-header">
+        <img src="favicon.ico" alt="Logo" width="20" height="20" class="d-inline-block align-text-top">
+        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Repertorio Series</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+
+      <div class="offcanvas-body d-flex flex-column">
+        <ul class="navbar-nav flex-grow-1">
+          <!-- Caricatueas -->
+          <li class="nav-item dropdown" *ngIf="permiso.puedeVer(Seccion.Caricatura)">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Caricaturas
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" routerLinkActive="active" [routerLink]="['caricaturas']">Lista</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item" routerLinkActive="active" [routerLink]="['temporadasCaricatura']" *ngIf="permiso.puedeVer(Seccion.TemporadaCaricatura)">Temporadas</a>
+                <!-- <a class="dropdown-item" routerLinkActive="active" [routerLink]="['temporadasCaricatura/agregar']" *ngIf="permiso.puedeCrear(Seccion.TemporadaCaricatura)">Agregar Temporadas</a> -->
+              </li>
+            </ul>
+          </li>
+
+          <!-- Series -->
+          <li class="nav-item dropdown" *ngIf="permiso.puedeVer(Seccion.Serie)">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Series
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" routerLinkActive="active" [routerLink]="['series']">Lista</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item" routerLinkActive="active" [routerLink]="['temporadasSerie']" *ngIf="permiso.puedeVer(Seccion.TemporadaSerie)">Temporadas</a>
+                <!-- <a class="dropdown-item" routerLinkActive="active" [routerLink]="['temporadasSerie/agregar']" *ngIf="permiso.puedeCrear(Seccion.TemporadaSerie)">Agregar Temporadas</a> -->
+              </li>
+            </ul>
+          </li>
+          <!-- Peliculas -->
+          <li class="nav-item" *ngIf="permiso.puedeVer(Seccion.Pelicula)">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['peliculas']">Películas</a>
+          </li>
+
+          <!-- Auditoria -->
+          <hr class="hr hr-blurry" *ngIf="permiso.puedeVer(Seccion.Bitacora) || permiso.puedeVer(Seccion.Usuarios)" />
+          <li class="nav-item dropdown" *ngIf="permiso.puedeVer(Seccion.Bitacora)">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Bitácora
+            </a>
+            <ul class="dropdown-menu dropdown-menu">
+              <li>
+                <a class="dropdown-item" routerLinkActive="active" [routerLink]="['bitacoraCarga']">Carga</a>
+              </li>
+              <li>
+                <a class="dropdown-item" routerLinkActive="active" [routerLink]="['bitacoraError']">Error</a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Usuarios -->
+          <li class="nav-item" *ngIf="permiso.puedeVer(Seccion.Usuarios)">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['users']">Usuarios</a>
+          </li>
+
+          <!-- Otros Proyectos -->
+          <li class="nav-item dropdown" *ngIf="permiso.puedeVer(Seccion.OtrosProyectos)">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Otros Proyectos
+            </a>
+
+            <ul class="dropdown-menu">
+              <li *ngFor="let item of otrosProyectosFiltrados">
+                <a class="dropdown-item" [href]="item.url" target="_blank">
+                  {{ item.nombre }}
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Cerrar Sesion -->
+          <hr class="hr hr-blurry" />
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-user-circle me-2"></i> <!-- icono usuario -->
+              {{user}}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+              <li>
+                <a class="dropdown-item d-flex align-items-center" [routerLink]="['profile']">
+                  <i class="fa-solid fa-id-card me-2"></i> Perfil
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" [routerLink]="['vistos/caricatura']">
+                  <i class="fa-solid fa-tv me-2"></i> Caricaturas Vistas
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" [routerLink]="['vistos/serie']">
+                  <i class="fa-solid fa-tv me-2"></i> Series Vistas
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center logout-item" (click)="Salir()">
+                  <i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar Sesión
+                </a>
+              </li>
+            </ul>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
