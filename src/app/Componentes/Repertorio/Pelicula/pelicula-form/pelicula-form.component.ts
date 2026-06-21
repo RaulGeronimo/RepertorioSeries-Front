@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AlertasService } from 'src/app/Services/alertas.service';
 import {
+  calificacionRequeridaPelicula,
   formatearFechaInput,
   FuncionesService,
 } from 'src/app/Shared/funciones';
@@ -63,39 +64,41 @@ export class PeliculaFormComponent implements OnInit {
     private catalogoService: CatalogosService,
     private navigationService: NavigationService,
   ) {
-    this.form = this.fb.group({
-      TipoRelacion: ['ninguna'],
-      Serie: [''],
-      SerieId: [0],
+    this.form = this.fb.group(
+      {
+        TipoRelacion: ['ninguna'],
+        Serie: [''],
+        SerieId: [0],
 
-      Caricatura: [''],
-      CaricaturaId: [0],
+        Caricatura: [''],
+        CaricaturaId: [0],
 
-      Nombre: ['', Validators.required],
-      OtrosNombres: ['', Validators.required],
-      Director: ['', Validators.required],
-      Estreno: ['', Validators.required],
-      EstrenoMexico: ['', Validators.required],
-      Calificacion: [
-        0,
-        [Validators.required, Validators.min(0), Validators.max(10)],
-      ],
-      Genero: ['', Validators.required],
-      Duracion: ['', Validators.required],
-      ClasificacionId: [
-        this.pelicula.clasificacionId || 0,
-        [Validators.required, this.funciones.noCeroValidator()],
-      ],
-      Productora: ['', Validators.required],
-      Distribuidora: ['', Validators.required],
-      Portada: [
-        '',
-        [
-          Validators.pattern('(https?:\\/\\/.*\\.(?:png|jpg|jpeg|webp))'),
-          Validators.required,
+        Nombre: ['', Validators.required],
+        OtrosNombres: ['', Validators.required],
+        Director: ['', Validators.required],
+        Estreno: ['', Validators.required],
+        EstrenoMexico: ['', Validators.required],
+        Calificacion: [null, [Validators.min(0), Validators.max(10)]],
+        Genero: ['', Validators.required],
+        Duracion: ['', Validators.required],
+        ClasificacionId: [
+          this.pelicula.clasificacionId || 0,
+          [Validators.required, this.funciones.noCeroValidator()],
         ],
-      ],
-    });
+        Productora: ['', Validators.required],
+        Distribuidora: ['', Validators.required],
+        Portada: [
+          '',
+          [
+            Validators.pattern('(https?:\\/\\/.*\\.(?:png|jpg|jpeg|webp))'),
+            Validators.required,
+          ],
+        ],
+      },
+      {
+        validators: [calificacionRequeridaPelicula()],
+      },
+    );
   }
 
   //#region Fechas
@@ -154,6 +157,7 @@ export class PeliculaFormComponent implements OnInit {
   }
 
   add() {
+    this.normalizarCalificacion();
     this.service.create(this.pelicula).subscribe(
       (res) => {
         this.regresar();
@@ -174,6 +178,7 @@ export class PeliculaFormComponent implements OnInit {
   }
 
   actualiza() {
+    this.normalizarCalificacion();
     const params = this.activatedRoute.snapshot.params;
     this.service.update(params['id'], this.pelicula).subscribe(
       (res) => {
@@ -193,6 +198,25 @@ export class PeliculaFormComponent implements OnInit {
       },
     );
   }
+
+  //#region Calificacion
+  normalizarCalificacion() {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+
+    const fechaEstreno = new Date(this.pelicula.estreno!);
+    fechaEstreno.setHours(0, 0, 0, 0);
+
+    if (hoy <= fechaEstreno) {
+      this.pelicula.calificacion = undefined as any;
+      return;
+    }
+
+    if (this.pelicula.calificacion == 0) {
+      this.pelicula.calificacion = undefined as any;
+    }
+  }
+  //#endregion Calificacion
 
   //#region Catalogos
   obtenerClasificacion() {

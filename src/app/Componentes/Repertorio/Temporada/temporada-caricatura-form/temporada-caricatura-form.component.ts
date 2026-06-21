@@ -60,14 +60,15 @@ export class TemporadaCaricaturaFormComponent implements OnInit {
         ],
         Temporada: ['', Validators.required],
         Capitulos: [0, [Validators.min(0), Validators.pattern('^[0-9]+$')]],
-        Calificacion: [0, [Validators.min(0), Validators.max(10)]],
+        Calificacion: [
+          null,
+          [Validators.required, Validators.min(0), Validators.max(10)],
+        ],
         FechaInicio: ['', Validators.required],
         FechaFin: ['', null],
         Portada: [
           '',
-          [
-            Validators.pattern('(https?:\\/\\/.*\\.(?:png|jpg|jpeg|webp))')
-          ],
+          [Validators.pattern('(https?:\\/\\/.*\\.(?:png|jpg|jpeg|webp))')],
         ],
       },
       {

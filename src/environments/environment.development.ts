@@ -8,6 +8,6 @@ export const environment = {
   urlMusica: 'http://localhost:8086/',
   urlSeries: 'http://localhost:8087/',
 
-  apiUrl: 'http://localhost:2000/api'
-  // apiUrl: 'http://localhost:5300/api'
+  // apiUrl: 'http://localhost:2000/api'
+  apiUrl: 'http://localhost:5300/api'
 };

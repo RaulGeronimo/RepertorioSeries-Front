@@ -318,6 +318,46 @@ export function calificacionRequeridaSiFechaFin(): ValidatorFn {
   };
 }
 
+export function calificacionRequeridaPelicula(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const estrenoValue = control.get('Estreno')?.value;
+    const calificacion = control.get('Calificacion')?.value;
+
+    if (!estrenoValue) {
+      return null;
+    }
+
+    const fechaEstreno = new Date(estrenoValue);
+    fechaEstreno.setHours(0, 0, 0, 0);
+
+    const fechaLimite = new Date(fechaEstreno);
+    fechaLimite.setMonth(fechaLimite.getMonth() + 3);
+
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+
+    if (hoy <= fechaEstreno) {
+      return null;
+    }
+
+    const esRequerida = hoy >= fechaLimite;
+
+    if (
+      esRequerida &&
+      (calificacion === null ||
+        calificacion === '' ||
+        calificacion === undefined ||
+        calificacion === 0)
+    ) {
+      return {
+        Calificacion: true,
+      };
+    }
+
+    return null;
+  };
+}
+
 export function FechaFinMayorQueFechaInicio(): ValidatorFn {
   return (formGroup: AbstractControl): ValidationErrors | null => {
     const fechaInicio = formGroup.get('FechaInicio')?.value;

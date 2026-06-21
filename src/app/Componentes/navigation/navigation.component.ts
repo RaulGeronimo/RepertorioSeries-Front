@@ -5,6 +5,12 @@ import { PermisosService } from 'src/app/Services/permisos.service';
 import { Seccion } from 'src/app/enum/seccion.enum';
 import { Rol } from 'src/app/enum/Rol.enum';
 import { environment } from 'src/environments/environment';
+import {
+  NavDropdownItem,
+  NavExternalLinkItem,
+  NavItem,
+  NavLinkItem,
+} from 'src/app/Models/NavItem';
 
 @Component({
   selector: 'app-navigation',
@@ -21,7 +27,67 @@ export class NavigationComponent {
   URL_Series = environment.urlSeries;
   //#endregion Permisos
 
-  otrosProyectos = [
+  //#region Principal
+  navItemsPrincipal: NavItem[] = [
+    {
+      tipo: 'dropdown',
+      nombre: 'Caricaturas',
+      seccion: Seccion.Caricatura,
+      items: [
+        { nombre: 'Lista', routerLink: ['caricaturas'] },
+        {
+          nombre: 'Temporadas',
+          routerLink: ['temporadasCaricatura'],
+          seccion: Seccion.TemporadaCaricatura,
+          divisorAntes: true,
+        },
+      ],
+    },
+    {
+      tipo: 'dropdown',
+      nombre: 'Series',
+      seccion: Seccion.Serie,
+      items: [
+        { nombre: 'Lista', routerLink: ['series'] },
+        {
+          nombre: 'Temporadas',
+          routerLink: ['temporadasSerie'],
+          seccion: Seccion.TemporadaSerie,
+          divisorAntes: true,
+        },
+      ],
+    },
+    {
+      tipo: 'link',
+      nombre: 'Películas',
+      routerLink: ['peliculas'],
+      seccion: Seccion.Pelicula,
+    },
+  ];
+  //#endregion Principal
+
+  //#region Auditoria
+  navItemsAuditoria: NavItem[] = [
+    {
+      tipo: 'dropdown',
+      nombre: 'Bitácora',
+      seccion: Seccion.Bitacora,
+      items: [
+        { nombre: 'Carga', routerLink: ['bitacoraCarga'] },
+        { nombre: 'Error', routerLink: ['bitacoraError'] },
+      ],
+    },
+    {
+      tipo: 'link',
+      nombre: 'Usuarios',
+      routerLink: ['users'],
+      seccion: Seccion.Usuarios,
+    },
+  ];
+  //#endregion Auditoria
+
+  //#region Otros Proyectos
+  otrosProyectos: NavExternalLinkItem[] = [
     {
       id: 1,
       nombre: 'Repertorio Música',
@@ -38,6 +104,7 @@ export class NavigationComponent {
       url: environment.urlAnime,
     },
   ];
+  //#endregion Otros Proyectos
 
   user: any;
   rol: any;
@@ -53,6 +120,18 @@ export class NavigationComponent {
 
   get otrosProyectosFiltrados() {
     return this.otrosProyectos.filter((x) => x.id !== this.proyecto);
+  }
+
+  esLink(item: NavItem): item is NavLinkItem {
+    return item.tipo === 'link';
+  }
+
+  esDropdown(item: NavItem): item is NavDropdownItem {
+    return item.tipo === 'dropdown';
+  }
+
+  puedeVerSeccion(seccion?: Seccion): boolean {
+    return !seccion || this.permiso.puedeVer(seccion);
   }
 
   Salir() {

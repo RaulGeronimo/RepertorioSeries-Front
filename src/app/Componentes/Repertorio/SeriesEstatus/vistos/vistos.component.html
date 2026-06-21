@@ -72,8 +72,8 @@
           {{dato.finVisualizacion | date: 'dd / MMMM / yyyy'}}
         </p>
       </div>
-      <div class="card-body border-top" *ngIf="show">
-        <p style="font-weight: bold;">Caricatura</p>
+      <div class="card-body border-top {{dato.estado}}" *ngIf="show">
+        <p style="font-weight: bold;">Serie</p>
         <p>{{dato.serie}}</p>
         <p style="font-weight: bold;">Capítulos</p>
         <p>{{dato.capitulos}}</p>
@@ -105,7 +105,7 @@
         </ng-container>
 
         <ng-container matColumnDef="serie">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Caricatura</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Serie</th>
           <td mat-cell *matCellDef="let dato">{{ dato.serie }}</td>
         </ng-container>
 

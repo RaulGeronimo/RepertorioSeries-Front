@@ -20,64 +20,67 @@
 
       <div class="offcanvas-body d-flex flex-column">
         <ul class="navbar-nav flex-grow-1">
-          <!-- Caricatueas -->
-          <li class="nav-item dropdown" *ngIf="permiso.puedeVer(Seccion.Caricatura)">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Caricaturas
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" routerLinkActive="active" [routerLink]="['caricaturas']">Lista</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li>
-                <a class="dropdown-item" routerLinkActive="active" [routerLink]="['temporadasCaricatura']" *ngIf="permiso.puedeVer(Seccion.TemporadaCaricatura)">Temporadas</a>
-                <!-- <a class="dropdown-item" routerLinkActive="active" [routerLink]="['temporadasCaricatura/agregar']" *ngIf="permiso.puedeCrear(Seccion.TemporadaCaricatura)">Agregar Temporadas</a> -->
-              </li>
-            </ul>
-          </li>
 
-          <!-- Series -->
-          <li class="nav-item dropdown" *ngIf="permiso.puedeVer(Seccion.Serie)">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Series
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" routerLinkActive="active" [routerLink]="['series']">Lista</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li>
-                <a class="dropdown-item" routerLinkActive="active" [routerLink]="['temporadasSerie']" *ngIf="permiso.puedeVer(Seccion.TemporadaSerie)">Temporadas</a>
-                <!-- <a class="dropdown-item" routerLinkActive="active" [routerLink]="['temporadasSerie/agregar']" *ngIf="permiso.puedeCrear(Seccion.TemporadaSerie)">Agregar Temporadas</a> -->
-              </li>
-            </ul>
-          </li>
-          <!-- Peliculas -->
-          <li class="nav-item" *ngIf="permiso.puedeVer(Seccion.Pelicula)">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['peliculas']">Películas</a>
-          </li>
+          <!-- Sección principal: Caricaturas, Series, Películas -->
+          <ng-container *ngFor="let item of navItemsPrincipal">
+            <ng-container *ngIf="puedeVerSeccion(item.seccion)">
 
-          <!-- Auditoria -->
+              <!-- Link simple -->
+              <li class="nav-item" *ngIf="esLink(item)">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="item.routerLink">{{ item.nombre }}</a>
+              </li>
+
+              <!-- Dropdown con sub-items -->
+              <li class="nav-item dropdown" *ngIf="esDropdown(item)">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  {{ item.nombre }}
+                </a>
+                <ul class="dropdown-menu">
+                  <ng-container *ngFor="let sub of item.items">
+                    <li *ngIf="puedeVerSeccion(sub.seccion)">
+                      <hr class="dropdown-divider" *ngIf="sub.divisorAntes">
+                      <a class="dropdown-item" routerLinkActive="active" [routerLink]="sub.routerLink">{{ sub.nombre
+                        }}</a>
+                    </li>
+                  </ng-container>
+                </ul>
+              </li>
+
+            </ng-container>
+          </ng-container>
+
+          <!-- Separador antes de Auditoria / Usuarios / Otros Proyectos -->
           <hr class="hr hr-blurry" *ngIf="permiso.puedeVer(Seccion.Bitacora) || permiso.puedeVer(Seccion.Usuarios)" />
-          <li class="nav-item dropdown" *ngIf="permiso.puedeVer(Seccion.Bitacora)">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Bitácora
-            </a>
-            <ul class="dropdown-menu dropdown-menu">
-              <li>
-                <a class="dropdown-item" routerLinkActive="active" [routerLink]="['bitacoraCarga']">Carga</a>
-              </li>
-              <li>
-                <a class="dropdown-item" routerLinkActive="active" [routerLink]="['bitacoraError']">Error</a>
-              </li>
-            </ul>
-          </li>
 
-          <!-- Usuarios -->
-          <li class="nav-item" *ngIf="permiso.puedeVer(Seccion.Usuarios)">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['users']">Usuarios</a>
-          </li>
+          <!-- Sección de auditoria: Bitácora, Usuarios -->
+          <ng-container *ngFor="let item of navItemsAuditoria">
+            <ng-container *ngIf="puedeVerSeccion(item.seccion)">
+
+              <!-- Link simple -->
+              <li class="nav-item" *ngIf="esLink(item)">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="item.routerLink">{{ item.nombre }}</a>
+              </li>
+
+              <!-- Dropdown con sub-items -->
+              <li class="nav-item dropdown" *ngIf="esDropdown(item)">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  {{ item.nombre }}
+                </a>
+                <ul class="dropdown-menu">
+                  <ng-container *ngFor="let sub of item.items">
+                    <li *ngIf="puedeVerSeccion(sub.seccion)">
+                      <hr class="dropdown-divider" *ngIf="sub.divisorAntes">
+                      <a class="dropdown-item" routerLinkActive="active" [routerLink]="sub.routerLink">{{ sub.nombre
+                        }}</a>
+                    </li>
+                  </ng-container>
+                </ul>
+              </li>
+
+            </ng-container>
+          </ng-container>
 
           <!-- Otros Proyectos -->
           <li class="nav-item dropdown" *ngIf="permiso.puedeVer(Seccion.OtrosProyectos)">

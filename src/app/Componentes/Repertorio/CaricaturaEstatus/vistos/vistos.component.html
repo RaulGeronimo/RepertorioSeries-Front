@@ -72,7 +72,7 @@
           {{dato.finVisualizacion | date: 'dd / MMMM / yyyy'}}
         </p>
       </div>
-      <div class="card-body border-top" *ngIf="show">
+      <div class="card-body border-top {{dato.estado}}" *ngIf="show">
         <p style="font-weight: bold;">Caricatura</p>
         <p>{{dato.caricatura}}</p>
         <p style="font-weight: bold;">Capítulos</p>

@@ -57,7 +57,7 @@
         <img [src]="dato.portada == '' ? '/assets/noImagen.png' : dato.portada " alt="Imagen de la Temporada"
           loading="lazy">
       </div>
-      <div class="card-body" *ngIf="show">
+      <div class="card-body {{dato.estado}}" *ngIf="show">
         <p style="font-weight: bold;">Caricatura</p>
         <p>{{dato.caricatura}}</p>
         <p style="font-weight: bold;">Capítulos</p>
