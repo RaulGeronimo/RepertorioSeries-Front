@@ -40,8 +40,9 @@
                   <ng-container *ngFor="let sub of item.items">
                     <li *ngIf="puedeVerSeccion(sub.seccion)">
                       <hr class="dropdown-divider" *ngIf="sub.divisorAntes">
-                      <a class="dropdown-item" routerLinkActive="active" [routerLink]="sub.routerLink">{{ sub.nombre
-                        }}</a>
+                      <a class="dropdown-item" routerLinkActive="active" [routerLink]="sub.routerLink">
+                        {{ sub.nombre }}
+                      </a>
                     </li>
                   </ng-container>
                 </ul>
@@ -72,8 +73,9 @@
                   <ng-container *ngFor="let sub of item.items">
                     <li *ngIf="puedeVerSeccion(sub.seccion)">
                       <hr class="dropdown-divider" *ngIf="sub.divisorAntes">
-                      <a class="dropdown-item" routerLinkActive="active" [routerLink]="sub.routerLink">{{ sub.nombre
-                        }}</a>
+                      <a class="dropdown-item" routerLinkActive="active" [routerLink]="sub.routerLink">
+                        {{ sub.nombre }}
+                      </a>
                     </li>
                   </ng-container>
                 </ul>

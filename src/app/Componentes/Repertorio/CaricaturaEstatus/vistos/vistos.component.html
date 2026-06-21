@@ -43,7 +43,7 @@
 <div class="container-scroll row" [hidden]="!tabla">
   <div class="col-md-4" *ngFor="let dato of Temporadas | customGlobalFilter:search" style="margin-bottom: 1.5rem;">
     <div class="card text-center">
-      <div class="card-header text-white d-flex justify-content-between align-items-center {{dato.estado}}"
+      <div class="card-header text-white d-flex justify-content-between align-items-center" [ngClass]="dato.estado"
         [ngStyle]="{ 'border': show ? 'none' : '' }">
         {{dato.nombre}}
 
@@ -64,7 +64,7 @@
         <img [src]="dato.portada == '' ? '/assets/noImagen.png' : dato.portada " alt="Imagen de la Temporada"
           loading="lazy">
       </div>
-      <div class="card-body">
+      <div class="card-body" [ngClass]="dato.estado">
         <p style="font-weight: bold;">Fecha de Visualización</p>
 
         <p>
@@ -72,7 +72,7 @@
           {{dato.finVisualizacion | date: 'dd / MMMM / yyyy'}}
         </p>
       </div>
-      <div class="card-body border-top {{dato.estado}}" *ngIf="show">
+      <div class="card-body" [ngClass]="dato.estado" *ngIf="show">
         <p style="font-weight: bold;">Caricatura</p>
         <p>{{dato.caricatura}}</p>
         <p style="font-weight: bold;">Capítulos</p>

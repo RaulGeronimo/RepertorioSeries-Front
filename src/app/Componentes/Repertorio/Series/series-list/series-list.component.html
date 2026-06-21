@@ -37,7 +37,7 @@
 <div class="container-scroll row" [hidden]="!tabla">
   <div class="col-md-4" *ngFor="let dato of Series | customGlobalFilter:search" style="margin-bottom: 1.5rem;">
     <div class="card text-center">
-      <div class="card-header text-white d-flex justify-content-between align-items-center {{dato.estado}}"
+      <div class="card-header text-white d-flex justify-content-between align-items-center" [ngClass]="dato.estado"
         [ngStyle]="{ 'border': show ? 'none' : '' }">
         {{dato.nombre}}
 
@@ -83,7 +83,7 @@
         </div>
 
       </div>
-      <div class="card-body {{dato.estado}}" *ngIf="show">
+      <div class="card-body" [ngClass]="dato.estado" *ngIf="show">
          <p style="font-weight: bold;">Películas</p>
         <p>{{dato.peliculas}}</p>
         <p style="font-weight: bold;">Temporadas</p>

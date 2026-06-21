@@ -64,7 +64,7 @@
   <!-- Temporadas -->
   <div class="col-md-4" *ngFor="let dato of Temporadas | customGlobalFilter:search" style="margin-bottom: 1.5rem;">
     <div class="card text-center">
-      <div class="card-header text-white d-flex justify-content-between align-items-center {{dato.estado}}"
+      <div class="card-header text-white d-flex justify-content-between align-items-center" [ngClass]="dato.estado"
         [ngStyle]="{ 'border': show ? 'none' : '' }">
         {{dato.nombre}}
 
@@ -86,7 +86,7 @@
         <img [src]="dato.portada == '' ? '/assets/noImagen.png' : dato.portada " alt="Imagen de la Temporada"
           loading="lazy">
       </div>
-      <div class="card-body {{dato.estado}}" *ngIf="show">
+      <div class="card-body" [ngClass]="dato.estado" *ngIf="show">
         <p style="font-weight: bold;">Capítulos</p>
         <p>{{dato.capitulos}}</p>
         <p style="font-weight: bold;">Primera Emisión</p>
