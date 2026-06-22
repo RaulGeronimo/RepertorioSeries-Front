@@ -104,17 +104,19 @@
               <label for="Fin" class="input-group-text">Fecha de Fin</label>
               <input id="Fin" type="date" [(ngModel)]="temporada.fechaFin" formControlName="FechaFin"
                 class="form-control"
-                [class.is-invalid]="(form.get('FechaFin')?.invalid || form.errors?.['fechaFinInvalida']) && form.get('FechaFin')?.touched"
-                [class.is-valid]="form.get('FechaFin')?.valid" />
+                [class.is-invalid]="(form.get('FechaFin')?.invalid || form.errors?.['fechaFinInvalida'] || form.errors?.['fechaFinFutura']) && form.get('FechaFin')?.touched"
+                [class.is-valid]="form.get('FechaFin')?.valid && !form.errors?.['fechaFinInvalida'] && !form.errors?.['fechaFinFutura']" />
             </div>
 
             <span *ngIf="form.get('FechaFin')?.hasError('required') && form.get('FechaFin')?.touched">
               El campo <span class="alerta">fecha Fin</span> es <strong>Requerido</strong>.
             </span>
-            <span
-              *ngIf="form.get('FechaFin')?.hasError('FechaFinMayorQueFechaInicio') || form.errors?.['fechaFinInvalida'] && form.get('FechaFin')?.touched">
+            <span *ngIf="form.errors?.['fechaFinInvalida'] && form.get('FechaFin')?.touched">
               El campo <span class="alerta">fecha fin</span> debe ser mayor a <strong>Fecha
                 Inicio</strong>.
+            </span>
+            <span *ngIf="form.errors?.['fechaFinFutura'] && form.get('FechaFin')?.touched">
+              El campo <span class="alerta">fecha fin</span> no puede ser una fecha <strong>futura</strong>.
             </span>
           </div>
 

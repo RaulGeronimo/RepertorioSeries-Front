@@ -267,24 +267,6 @@ export function formatearFechaInput(fecha: string): string {
 }
 
 //#region Temporadas
-// export function calificacionRequeridaSiFechaFin(): ValidatorFn {
-//   return (control: AbstractControl): ValidationErrors | null => {
-//     const fechaFin = control.get('FechaFin')?.value;
-//     const calificacion = control.get('Calificacion')?.value;
-
-//     if (
-//       fechaFin &&
-//       (calificacion === null ||
-//         calificacion === '' ||
-//         calificacion == undefined ||
-//         calificacion == 0)
-//     ) {
-//       return { Calificacion: true };
-//     }
-//     return null;
-//   };
-// }
-
 export function calificacionRequeridaSiFechaFin(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const fechaFin = control.get('FechaFin')?.value;
@@ -370,7 +352,7 @@ export function FechaFinMayorQueFechaInicio(): ValidatorFn {
     const inicio = new Date(fechaInicio);
     const fin = new Date(fechaFin);
 
-    return fin >= inicio ? null : { fechaFinInvalida: true };
+    return fin > inicio ? null : { fechaFinInvalida: true };
   };
 }
 
@@ -385,7 +367,7 @@ export function LimiteFecha(): ValidatorFn {
     const fin = new Date(fechaFin);
     const actual = new Date();
 
-    return fin <= actual ? null : { fechaFinInvalida: true };
+    return fin <= actual ? null : { fechaFinFutura: true };
   };
 }
 //#endregion Temporadas

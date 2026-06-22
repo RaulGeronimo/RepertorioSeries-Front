@@ -60,10 +60,7 @@ export class TemporadaSerieFormComponent implements OnInit {
         ],
         Temporada: ['', Validators.required],
         Capitulos: [0, [Validators.min(0), Validators.pattern('^[0-9]+$')]],
-        Calificacion: [
-          null,
-          [Validators.required, Validators.min(0), Validators.max(10)],
-        ],
+        Calificacion: [0, [Validators.min(0), Validators.max(10)]],
         FechaInicio: ['', Validators.required],
         FechaFin: ['', null],
         Portada: [
@@ -86,22 +83,10 @@ export class TemporadaSerieFormComponent implements OnInit {
   //#region Fechas
   setDefaultDates() {
     const fechaActual: Date = new Date();
-    const primerDiaMes: Date = new Date(
-      fechaActual.getFullYear(),
-      fechaActual.getMonth(),
-      1,
-    );
-    const ultimoDiaMes: Date = new Date(
-      fechaActual.getFullYear(),
-      fechaActual.getMonth() + 1,
-      0,
-    );
-    const primerDiaMesFormato: string = primerDiaMes
-      .toISOString()
-      .split('T')[0];
-    const ultimoDiaMesFormato: string = ultimoDiaMes
-      .toISOString()
-      .split('T')[0];
+    const primerDiaMes: Date = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1);
+    const ultimoDiaMes: Date = new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 1, 0);
+    const primerDiaMesFormato: string = primerDiaMes.toISOString().split('T')[0];
+    const ultimoDiaMesFormato: string = ultimoDiaMes.toISOString().split('T')[0];
     this.temporada.fechaInicio = primerDiaMesFormato;
     //this.temporada.FechaFin = ultimoDiaMesFormato;
   }
