@@ -5,6 +5,7 @@ import { AlertasService } from 'src/app/Services/alertas.service';
 
 import { Serie } from 'src/app/Models/Serie';
 import { SerieService } from 'src/app/Services/serie.service';
+import { NavigationService } from 'src/app/Services/navigation.service';
 
 @Component({
   selector: 'app-series-form',
@@ -37,6 +38,7 @@ export class SeriesFormComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private alerta: AlertasService,
+    private navigationService: NavigationService,
   ) {
     this.form = this.fb.group({
       Nombre: ['', Validators.required],
@@ -105,5 +107,9 @@ export class SeriesFormComponent implements OnInit {
         }
       },
     );
+  }
+
+  regresar() {
+    this.navigationService.goBack();
   }
 }

@@ -65,12 +65,14 @@ export class TemporadaCaricaturaFormComponent implements OnInit {
         FechaFin: ['', null],
         Portada: [
           '',
-          [Validators.pattern('(https?:\\/\\/.*\\.(?:png|jpg|jpeg|webp))')],
+          [
+            Validators.pattern('(https?:\\/\\/.*\\.(?:png|jpg|jpeg|webp))')
+          ],
         ],
       },
       {
         validators: [
-          FechaFinMayorQueFechaInicio(),
+          FechaFinMayorQueFechaInicio(true),
           LimiteFecha(),
           calificacionRequeridaSiFechaFin(),
         ],
@@ -119,8 +121,8 @@ export class TemporadaCaricaturaFormComponent implements OnInit {
 
   add() {
     this.temporada.fechaFin = this.temporada.fechaFin || null;
-    this.temporada.calificacion == 0 ? null : this.temporada.calificacion;
-    this.temporada.capitulos == 0 ? null : this.temporada.capitulos;
+    this.temporada.calificacion = this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
+    this.temporada.capitulos = this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
     this.service.create(this.temporada).subscribe(
       (res) => {
         this.regresar();
@@ -142,8 +144,8 @@ export class TemporadaCaricaturaFormComponent implements OnInit {
 
   actualiza() {
     this.temporada.fechaFin = this.temporada.fechaFin || null;
-    this.temporada.calificacion == 0 ? null : this.temporada.calificacion;
-    this.temporada.capitulos == 0 ? null : this.temporada.capitulos;
+    this.temporada.calificacion = this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
+    this.temporada.capitulos = this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
     const params = this.activatedRoute.snapshot.params;
     this.service.update(params['id'], this.temporada).subscribe(
       (res) => {

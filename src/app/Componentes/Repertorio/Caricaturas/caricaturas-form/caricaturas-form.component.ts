@@ -5,6 +5,7 @@ import { AlertasService } from 'src/app/Services/alertas.service';
 
 import { Caricatura } from 'src/app/Models/Caricatura';
 import { CaricaturaService } from 'src/app/Services/caricatura.service';
+import { NavigationService } from 'src/app/Services/navigation.service';
 
 @Component({
   selector: 'app-caricaturas-form',
@@ -37,6 +38,7 @@ export class CaricaturasFormComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private alerta: AlertasService,
+    private navigationService: NavigationService,
   ) {
     this.form = this.fb.group({
       Nombre: ['', Validators.required],
@@ -105,5 +107,9 @@ export class CaricaturasFormComponent implements OnInit {
         }
       },
     );
+  }
+
+  regresar() {
+    this.navigationService.goBack();
   }
 }

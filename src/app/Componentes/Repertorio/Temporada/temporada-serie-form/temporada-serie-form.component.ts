@@ -72,7 +72,7 @@ export class TemporadaSerieFormComponent implements OnInit {
       },
       {
         validators: [
-          FechaFinMayorQueFechaInicio(),
+          FechaFinMayorQueFechaInicio(true),
           LimiteFecha(),
           calificacionRequeridaSiFechaFin(),
         ],
@@ -121,8 +121,8 @@ export class TemporadaSerieFormComponent implements OnInit {
 
   add() {
     this.temporada.fechaFin = this.temporada.fechaFin || null;
-    this.temporada.calificacion == 0 ? null : this.temporada.calificacion;
-    this.temporada.capitulos == 0 ? null : this.temporada.capitulos;
+    this.temporada.calificacion = this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
+    this.temporada.capitulos = this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
     this.service.create(this.temporada).subscribe(
       (res) => {
         this.regresar();
@@ -144,8 +144,8 @@ export class TemporadaSerieFormComponent implements OnInit {
 
   actualiza() {
     this.temporada.fechaFin = this.temporada.fechaFin || null;
-    this.temporada.calificacion == 0 ? null : this.temporada.calificacion;
-    this.temporada.capitulos == 0 ? null : this.temporada.capitulos;
+    this.temporada.calificacion = this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
+    this.temporada.capitulos = this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
     const params = this.activatedRoute.snapshot.params;
     this.service.update(params['id'], this.temporada).subscribe(
       (res) => {

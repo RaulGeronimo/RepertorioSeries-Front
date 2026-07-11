@@ -67,8 +67,9 @@ export class BuscarSerieComponent implements OnInit, AfterViewInit {
   Seccion = Seccion;
   //#endregion Permisos
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('paginator') paginator!: MatPaginator;
+  @ViewChild('sortTemporadas') sortTemporadas!: MatSort;
+  @ViewChild('sortPeliculas') sortPeliculas!: MatSort;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -83,11 +84,12 @@ export class BuscarSerieComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
+    // Solo temporadas tienen paginador fijo
+    this.dataSource.sort = this.sortTemporadas;
     this.dataSource.paginator = this.paginator;
 
-    this.dataSourcePelicula.sort = this.sort;
-    this.dataSourcePelicula.paginator = this.paginator;
+    // Películas solo tienen sort, sin paginador
+    this.dataSourcePelicula.sort = this.sortPeliculas;
   }
 
   obtenerDatos() {
@@ -167,9 +169,6 @@ export class BuscarSerieComponent implements OnInit, AfterViewInit {
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
-    }
-    if (this.dataSourcePelicula.paginator) {
-      this.dataSourcePelicula.paginator.firstPage();
     }
   }
 

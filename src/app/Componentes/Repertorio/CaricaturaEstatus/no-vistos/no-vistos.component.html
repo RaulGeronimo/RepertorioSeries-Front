@@ -76,7 +76,7 @@
         <p>{{dato.capitulos}}</p>
         <p style="font-weight: bold;">Primera Emisión</p>
         <p>{{dato.fechaInicio | date: 'dd / MMMM / yyyy'}}</p>
-        <p style="font-weight: bold;">Ultima Emisión</p>
+        <p style="font-weight: bold;" *ngIf="dato.fechaFin">Ultima Emisión</p>
         <p>{{dato.fechaFin | date: 'dd / MMMM / yyyy'}}</p>
         <p style="font-weight: bold;">Calificación</p>
         <p>{{dato.calificacion}}</p>

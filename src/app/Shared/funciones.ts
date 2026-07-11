@@ -340,7 +340,7 @@ export function calificacionRequeridaPelicula(): ValidatorFn {
   };
 }
 
-export function FechaFinMayorQueFechaInicio(): ValidatorFn {
+export function FechaFinMayorQueFechaInicio(permitirIgual: boolean = false): ValidatorFn {
   return (formGroup: AbstractControl): ValidationErrors | null => {
     const fechaInicio = formGroup.get('FechaInicio')?.value;
     const fechaFin = formGroup.get('FechaFin')?.value;
@@ -352,7 +352,9 @@ export function FechaFinMayorQueFechaInicio(): ValidatorFn {
     const inicio = new Date(fechaInicio);
     const fin = new Date(fechaFin);
 
-    return fin > inicio ? null : { fechaFinInvalida: true };
+    const esValida = permitirIgual ? fin >= inicio : fin > inicio;
+
+    return esValida ? null : { fechaFinInvalida: true };
   };
 }
 
