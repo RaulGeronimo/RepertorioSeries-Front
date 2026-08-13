@@ -13,7 +13,7 @@ import { SerieService } from 'src/app/Services/serie.service';
 @Component({
   selector: 'app-series-list',
   templateUrl: './series-list.component.html',
-  styleUrls: ['./series-list.component.css']
+  styleUrls: ['./series-list.component.css'],
 })
 export class SeriesListComponent implements OnInit, AfterViewInit {
   pageSize: number = environment.registrosPagina;
@@ -56,7 +56,7 @@ export class SeriesListComponent implements OnInit, AfterViewInit {
   constructor(
     private service: SerieService,
     private alerta: AlertasService,
-    private funcion: FuncionesService,
+    public funciones: FuncionesService,
     public permiso: PermisosService,
   ) {}
 
@@ -125,6 +125,6 @@ export class SeriesListComponent implements OnInit, AfterViewInit {
 
   export() {
     this.alerta.reporte(this.Archivo);
-    this.funcion.exportarExcel(this.Series, this.Archivo);
+    this.funciones.exportarExcel(this.Series, this.Archivo);
   }
 }

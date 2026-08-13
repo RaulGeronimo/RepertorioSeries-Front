@@ -144,7 +144,8 @@
 
   <div class="col-md-4 inicio-card">
     <div class="card card-body text-center">
-      <img [src]="temporada.portada == '' ? '/assets/noImagen.png' : temporada.portada " class="card-img-top">
+      <img [src]="temporada.portada == '' ? '/assets/noImagen.png' : temporada.portada " class="card-img-top"
+        (error)="funciones.imagenNoValida($event)">
       <h3 style="text-transform: uppercase;">
         {{temporada.temporadaId}} - {{temporada.serieId == 0 ? 'Serie' : getNombreSerie(temporada.serieId!)}}
       </h3>

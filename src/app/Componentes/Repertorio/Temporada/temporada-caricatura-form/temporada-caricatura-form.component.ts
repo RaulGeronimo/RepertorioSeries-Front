@@ -9,12 +9,12 @@ import {
   FuncionesService,
   LimiteFecha,
 } from 'src/app/Shared/funciones';
+import { NavigationService } from 'src/app/Services/navigation.service';
 
 import { TemporadaCaricatura } from 'src/app/Models/Temporada';
 import { TemporadasCaricaturaService } from 'src/app/Services/temporadas-caricatura.service';
 
 import { CaricaturaService } from 'src/app/Services/caricatura.service';
-import { NavigationService } from 'src/app/Services/navigation.service';
 
 @Component({
   selector: 'app-temporada-caricatura-form',
@@ -43,11 +43,12 @@ export class TemporadaCaricaturaFormComponent implements OnInit {
 
   constructor(
     private service: TemporadasCaricaturaService,
-    private funciones: FuncionesService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private alerta: AlertasService,
+    public funciones: FuncionesService,
     private navigationService: NavigationService,
+
     private caricaturaService: CaricaturaService,
   ) {
     this.form = this.fb.group(
@@ -65,9 +66,7 @@ export class TemporadaCaricaturaFormComponent implements OnInit {
         FechaFin: ['', null],
         Portada: [
           '',
-          [
-            Validators.pattern('(https?:\\/\\/.*\\.(?:png|jpg|jpeg|webp))')
-          ],
+          [Validators.pattern('(https?:\\/\\/.*\\.(?:png|jpg|jpeg|webp))')],
         ],
       },
       {
@@ -83,10 +82,22 @@ export class TemporadaCaricaturaFormComponent implements OnInit {
   //#region Fechas
   setDefaultDates() {
     const fechaActual: Date = new Date();
-    const primerDiaMes: Date = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1);
-    const ultimoDiaMes: Date = new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 1, 0);
-    const primerDiaMesFormato: string = primerDiaMes.toISOString().split('T')[0];
-    const ultimoDiaMesFormato: string = ultimoDiaMes.toISOString().split('T')[0];
+    const primerDiaMes: Date = new Date(
+      fechaActual.getFullYear(),
+      fechaActual.getMonth(),
+      1,
+    );
+    const ultimoDiaMes: Date = new Date(
+      fechaActual.getFullYear(),
+      fechaActual.getMonth() + 1,
+      0,
+    );
+    const primerDiaMesFormato: string = primerDiaMes
+      .toISOString()
+      .split('T')[0];
+    const ultimoDiaMesFormato: string = ultimoDiaMes
+      .toISOString()
+      .split('T')[0];
     this.temporada.fechaInicio = primerDiaMesFormato;
     //this.temporada.FechaFin = ultimoDiaMesFormato;
   }
@@ -121,8 +132,10 @@ export class TemporadaCaricaturaFormComponent implements OnInit {
 
   add() {
     this.temporada.fechaFin = this.temporada.fechaFin || null;
-    this.temporada.calificacion = this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
-    this.temporada.capitulos = this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
+    this.temporada.calificacion =
+      this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
+    this.temporada.capitulos =
+      this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
     this.service.create(this.temporada).subscribe(
       (res) => {
         this.regresar();
@@ -144,8 +157,10 @@ export class TemporadaCaricaturaFormComponent implements OnInit {
 
   actualiza() {
     this.temporada.fechaFin = this.temporada.fechaFin || null;
-    this.temporada.calificacion = this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
-    this.temporada.capitulos = this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
+    this.temporada.calificacion =
+      this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
+    this.temporada.capitulos =
+      this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
     const params = this.activatedRoute.snapshot.params;
     this.service.update(params['id'], this.temporada).subscribe(
       (res) => {

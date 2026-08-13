@@ -43,7 +43,7 @@
       </div>
       <div class="box">
         <img [src]="dato.portada == '' ? '/assets/noImagen.png' : dato.portada " alt="Imagen de la Temporada"
-          loading="lazy">
+          (error)="funciones.imagenNoValida($event)" loading="lazy">
       </div>
       <div class="card-body" *ngIf="show">
         <p style="font-weight: bold;">Género</p>

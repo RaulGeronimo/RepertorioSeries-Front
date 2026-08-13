@@ -123,7 +123,8 @@
 
   <div class="col-md-4 inicio-card">
     <div class="card card-body text-center">
-      <img [src]="caricatura.portada == '' ? '/assets/noImagen.png' : caricatura.portada" class="card-img-top">
+      <img [src]="caricatura.portada == '' ? '/assets/noImagen.png' : caricatura.portada" class="card-img-top"
+        (error)="funciones.imagenNoValida($event)">
       <h3 style="text-transform: uppercase;">
         {{caricatura.caricaturaId}} - {{caricatura.nombre == '' ? 'Nombre de la Caricatura' : caricatura.nombre}}
       </h3>

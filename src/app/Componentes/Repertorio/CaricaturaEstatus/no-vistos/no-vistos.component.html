@@ -8,13 +8,16 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a class="dropdown-item" routerLinkActive="active" type="button" [routerLink]="['/repertorio/vistos/caricatura']">Vistos</a>
+          <a class="dropdown-item" routerLinkActive="active" type="button"
+            [routerLink]="['/repertorio/vistos/caricatura']">Vistos</a>
         </li>
         <li>
-          <a class="dropdown-item" routerLinkActive="active" type="button" [routerLink]="['/repertorio/noVistos/caricatura']">No Vistos</a>
+          <a class="dropdown-item" routerLinkActive="active" type="button"
+            [routerLink]="['/repertorio/noVistos/caricatura']">No Vistos</a>
         </li>
         <li>
-          <a class="dropdown-item" routerLinkActive="active" type="button" [routerLink]="['/repertorio/proximos/caricatura']">Próximos</a>
+          <a class="dropdown-item" routerLinkActive="active" type="button"
+            [routerLink]="['/repertorio/proximos/caricatura']">Próximos</a>
         </li>
       </ul>
     </div>
@@ -67,7 +70,7 @@
       </div>
       <div class="box">
         <img [src]="dato.portada == '' ? '/assets/noImagen.png' : dato.portada " alt="Imagen de la Temporada"
-          loading="lazy">
+          (error)="funciones.imagenNoValida($event)" loading="lazy">
       </div>
       <div class="card-body" [ngClass]="dato.estado" *ngIf="show">
         <p style="font-weight: bold;">Caricatura</p>
@@ -82,8 +85,8 @@
         <p>{{dato.calificacion}}</p>
 
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-          <a [routerLink]="['/repertorio/temporadasCaricatura/actualizar', dato.temporadaId]" class="btn btn-info btn-block"><i
-              class="fa-solid fa-pen-to-square"></i>
+          <a [routerLink]="['/repertorio/temporadasCaricatura/actualizar', dato.temporadaId]"
+            class="btn btn-info btn-block"><i class="fa-solid fa-pen-to-square"></i>
           </a>
         </div>
       </div>

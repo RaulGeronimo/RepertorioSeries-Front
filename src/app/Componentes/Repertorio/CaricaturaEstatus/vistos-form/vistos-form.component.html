@@ -92,7 +92,7 @@
   <div class="col-md-4 inicio-card">
     <div class="card card-body text-center">
       <img [src]="siguiendo.temporadaId == 0 ? '/assets/noImagen.png' : getImagenTemporada(siguiendo.temporadaId!)"
-        class="card-img-top">
+        class="card-img-top" (error)="funciones.imagenNoValida($event)">
       <h3 style="text-transform: uppercase;">
         {{siguiendo.caricaturaSiguiendoId}} - {{siguiendo.temporadaId == 0 ? 'Temporada' :
         getNombreTemporada(siguiendo.temporadaId!)}}

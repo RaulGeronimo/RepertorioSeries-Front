@@ -12,7 +12,7 @@ import { SerieEstatusService } from 'src/app/Services/serie-estatus.service';
 @Component({
   selector: 'app-vistos',
   templateUrl: './vistos.component.html',
-  styleUrls: ['./vistos.component.css']
+  styleUrls: ['./vistos.component.css'],
 })
 export class SVistosComponent implements OnInit, AfterViewInit {
   pageSize: number = environment.registrosPagina;
@@ -48,7 +48,7 @@ export class SVistosComponent implements OnInit, AfterViewInit {
   constructor(
     private service: SerieEstatusService,
     private alerta: AlertasService,
-    private funcion: FuncionesService,
+    public funciones: FuncionesService,
     public permiso: PermisosService,
   ) {}
 
@@ -109,6 +109,6 @@ export class SVistosComponent implements OnInit, AfterViewInit {
 
   export() {
     this.alerta.reporte(this.Archivo);
-    this.funcion.exportarExcel(this.Temporadas, this.Archivo);
+    this.funciones.exportarExcel(this.Temporadas, this.Archivo);
   }
 }

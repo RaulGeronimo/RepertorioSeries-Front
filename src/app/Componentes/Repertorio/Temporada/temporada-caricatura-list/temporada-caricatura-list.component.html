@@ -7,8 +7,10 @@
       Agregar
     </button>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.Caricatura)" [routerLink]="['/repertorio/caricaturas/agregar']">Caricatura</a></li>
-      <li><a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.TemporadaCaricatura)" [routerLink]="['agregar']">Temporada</a></li>
+      <li><a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.Caricatura)"
+          [routerLink]="['/repertorio/caricaturas/agregar']">Caricatura</a></li>
+      <li><a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.TemporadaCaricatura)"
+          [routerLink]="['agregar']">Temporada</a></li>
     </ul>
   </div>
 
@@ -55,7 +57,7 @@
       </div>
       <div class="box">
         <img [src]="dato.portada == '' ? '/assets/noImagen.png' : dato.portada " alt="Imagen de la Temporada"
-          loading="lazy">
+          (error)="funciones.imagenNoValida($event)" loading="lazy">
       </div>
       <div class="card-body" [ngClass]="dato.estado" *ngIf="show">
         <p style="font-weight: bold;">Caricatura</p>
@@ -138,8 +140,9 @@
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef="let dato">
             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-              <a *ngIf="permiso.puedeEditar(Seccion.TemporadaCaricatura)" [routerLink]="['actualizar', dato.temporadaId]"
-                class="btn btn-info btn-block"><i class="fa-solid fa-pen-to-square"></i>
+              <a *ngIf="permiso.puedeEditar(Seccion.TemporadaCaricatura)"
+                [routerLink]="['actualizar', dato.temporadaId]" class="btn btn-info btn-block"><i
+                  class="fa-solid fa-pen-to-square"></i>
               </a>
 
               <button *ngIf="permiso.puedeEliminar(Seccion.TemporadaCaricatura)" class="btn btn-danger"

@@ -6,10 +6,12 @@
     </button>
     <ul class="dropdown-menu">
       <li>
-        <a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.Caricatura)" [routerLink]="['agregar']">Caricatura</a>
+        <a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.Caricatura)"
+          [routerLink]="['agregar']">Caricatura</a>
       </li>
       <li>
-        <a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.TemporadaCaricatura)" [routerLink]="['/repertorio/temporadasCaricatura/agregar']">Temporada</a>
+        <a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.TemporadaCaricatura)"
+          [routerLink]="['/repertorio/temporadasCaricatura/agregar']">Temporada</a>
       </li>
     </ul>
   </div>
@@ -65,7 +67,8 @@
           <div class="carousel-inner">
             <div *ngFor="let portada of dato.portadasArray; let i = index" class="carousel-item"
               [class.active]="i === 0">
-              <img [src]="portada" alt="Portada de la caricatura" loading="lazy">
+              <img [src]="portada" alt="Portada de la caricatura" (error)="funciones.imagenNoValida($event)"
+                loading="lazy">
             </div>
           </div>
 

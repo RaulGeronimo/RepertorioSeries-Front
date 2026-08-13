@@ -13,7 +13,7 @@ import { TemporadasSerieService } from 'src/app/Services/temporadas-serie.servic
 @Component({
   selector: 'app-temporada-serie-list',
   templateUrl: './temporada-serie-list.component.html',
-  styleUrls: ['./temporada-serie-list.component.css']
+  styleUrls: ['./temporada-serie-list.component.css'],
 })
 export class TemporadaSerieListComponent implements OnInit, AfterViewInit {
   pageSize: number = environment.registrosPagina;
@@ -50,7 +50,7 @@ export class TemporadaSerieListComponent implements OnInit, AfterViewInit {
   constructor(
     private service: TemporadasSerieService,
     private alerta: AlertasService,
-    private funcion: FuncionesService,
+    public funciones: FuncionesService,
     public permiso: PermisosService,
   ) {}
 
@@ -111,6 +111,6 @@ export class TemporadaSerieListComponent implements OnInit, AfterViewInit {
 
   export() {
     this.alerta.reporte(this.Archivo);
-    this.funcion.exportarExcel(this.Temporadas, this.Archivo);
+    this.funciones.exportarExcel(this.Temporadas, this.Archivo);
   }
 }

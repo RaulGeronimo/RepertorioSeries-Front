@@ -6,8 +6,8 @@
           <!-- Caricatura -->
           <div class="card-body">
             <div class="input-group">
-              <input type="text" formControlName="Caricatura" [(ngModel)]="search" placeholder="Caricatura:" class="form-control"
-                autofocus>
+              <input type="text" formControlName="Caricatura" [(ngModel)]="search" placeholder="Caricatura:"
+                class="form-control" autofocus>
 
               <select *ngIf="search != null || edit" formControlName="CaricaturaId" [(ngModel)]="temporada.caricaturaId"
                 class="form-control" id="inputGroupSelect01"
@@ -18,7 +18,8 @@
                   {{item.nombre}}</option>
               </select>
 
-              <button type="button" class="btn btn-primary" (click)="refrescarCaricatura()" title="Refrescar Caricaturas">
+              <button type="button" class="btn btn-primary" (click)="refrescarCaricatura()"
+                title="Refrescar Caricaturas">
                 ↻
               </button>
             </div>
@@ -144,9 +145,11 @@
 
   <div class="col-md-4 inicio-card">
     <div class="card card-body text-center">
-      <img [src]="temporada.portada == '' ? '/assets/noImagen.png' : temporada.portada " class="card-img-top">
+      <img [src]="temporada.portada == '' ? '/assets/noImagen.png' : temporada.portada " class="card-img-top"
+        (error)="funciones.imagenNoValida($event)">
       <h3 style="text-transform: uppercase;">
-        {{temporada.temporadaId}} - {{temporada.caricaturaId == 0 ? 'Caricatura' : getNombreCaricatura(temporada.caricaturaId!)}}
+        {{temporada.temporadaId}} - {{temporada.caricaturaId == 0 ? 'Caricatura' :
+        getNombreCaricatura(temporada.caricaturaId!)}}
       </h3>
       <p>{{temporada.nombre == '' ? 'Nombre de la Temporada' : temporada.nombre}}</p>
       <p>{{temporada.capitulos == 0 ? 'Capitulos' : temporada.capitulos}}</p>

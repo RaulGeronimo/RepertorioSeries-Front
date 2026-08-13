@@ -147,6 +147,13 @@ export class FuncionesService {
   }
 
   //#endregion Excel
+
+  //#region Imagen no Valida
+  public imagenNoValida(event: Event, imagenDefault: string = '/assets/imagen-rota.png'): void {
+    const img = event.target as HTMLImageElement;
+    img.src = imagenDefault;
+  }
+  //#endregion Imagen no Valida
 }
 
 export function formatearFecha(fecha: string | number | Date): string {

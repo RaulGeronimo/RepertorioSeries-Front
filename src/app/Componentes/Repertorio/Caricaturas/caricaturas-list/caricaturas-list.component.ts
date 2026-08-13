@@ -56,7 +56,7 @@ export class CaricaturasListComponent implements OnInit, AfterViewInit {
   constructor(
     private service: CaricaturaService,
     private alerta: AlertasService,
-    private funcion: FuncionesService,
+    public funciones: FuncionesService,
     public permiso: PermisosService,
   ) {}
 
@@ -125,6 +125,6 @@ export class CaricaturasListComponent implements OnInit, AfterViewInit {
 
   export() {
     this.alerta.reporte(this.Archivo);
-    this.funcion.exportarExcel(this.Caricaturas, this.Archivo);
+    this.funciones.exportarExcel(this.Caricaturas, this.Archivo);
   }
 }

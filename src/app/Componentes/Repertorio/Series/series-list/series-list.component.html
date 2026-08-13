@@ -1,15 +1,16 @@
 <div class="inicio-card input-group flex-nowrap">
-  <div class="dropdown"
-    *ngIf="permiso.puedeCrear(Seccion.Serie) || permiso.puedeCrear(Seccion.TemporadaSerie)">
+  <div class="dropdown" *ngIf="permiso.puedeCrear(Seccion.Serie) || permiso.puedeCrear(Seccion.TemporadaSerie)">
     <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
       Agregar
     </button>
     <ul class="dropdown-menu">
       <li>
-        <a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.Serie)" [routerLink]="['agregar']">Serie</a>
+        <a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.Serie)"
+          [routerLink]="['agregar']">Serie</a>
       </li>
       <li>
-        <a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.TemporadaSerie)" [routerLink]="['/repertorio/temporadasSerie/agregar']">Temporada</a>
+        <a class="dropdown-item" type="button" *ngIf="permiso.puedeCrear(Seccion.TemporadaSerie)"
+          [routerLink]="['/repertorio/temporadasSerie/agregar']">Temporada</a>
       </li>
     </ul>
   </div>
@@ -42,8 +43,7 @@
         {{dato.nombre}}
 
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-          <button *ngIf="permiso.puedeEliminar(Seccion.Serie)" class="btn btn-danger"
-            (click)="borrar(dato.serieId)">
+          <button *ngIf="permiso.puedeEliminar(Seccion.Serie)" class="btn btn-danger" (click)="borrar(dato.serieId)">
             <i class="far fa-trash-alt"></i>
           </button>
 
@@ -65,7 +65,7 @@
           <div class="carousel-inner">
             <div *ngFor="let portada of dato.portadasArray; let i = index" class="carousel-item"
               [class.active]="i === 0">
-              <img [src]="portada" alt="Portada de la Serie" loading="lazy">
+              <img [src]="portada" alt="Portada de la Serie" (error)="funciones.imagenNoValida($event)" loading="lazy">
             </div>
           </div>
 
@@ -84,7 +84,7 @@
 
       </div>
       <div class="card-body" [ngClass]="dato.estado" *ngIf="show">
-         <p style="font-weight: bold;">Películas</p>
+        <p style="font-weight: bold;">Películas</p>
         <p>{{dato.peliculas}}</p>
         <p style="font-weight: bold;">Temporadas</p>
         <p>{{dato.temporadas}}</p>

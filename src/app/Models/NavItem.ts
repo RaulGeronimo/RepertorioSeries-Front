@@ -4,7 +4,14 @@ export interface NavSubItem {
   nombre: string;
   routerLink: string[];
   seccion?: Seccion;
+  accion?: 'ver' | 'crear';
   divisorAntes?: boolean;
+}
+
+export interface NavLink {
+  nombre: string;
+  routerLink: string[];
+  seccion?: Seccion;
 }
 
 export interface NavLinkItem {
@@ -21,7 +28,13 @@ export interface NavDropdownItem {
   items: NavSubItem[];
 }
 
-export type NavItem = NavLinkItem | NavDropdownItem;
+export interface NavMultiLinkItem {
+  tipo: 'multi';
+  seccion?: Seccion;
+  links: NavLink[];
+}
+
+export type NavItem = NavLinkItem | NavDropdownItem | NavMultiLinkItem;
 
 export interface NavExternalLinkItem {
   id: number;

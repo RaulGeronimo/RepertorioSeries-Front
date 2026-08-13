@@ -244,7 +244,8 @@
   <!-- Panel derecho -->
   <div class="col-md-4 inicio-card">
     <div class="card card-body text-center">
-      <img [src]="pelicula.portada == '' ? '/assets/noImagen.png' : pelicula.portada" class="card-img-top">
+      <img [src]="pelicula.portada == '' ? '/assets/noImagen.png' : pelicula.portada" class="card-img-top"
+        (error)="funciones.imagenNoValida($event)">
       <h3 style="text-transform: uppercase;">
         {{pelicula.peliculaId}} - {{pelicula.nombre == '' ? 'Pelicula' : pelicula.nombre}}
       </h3>

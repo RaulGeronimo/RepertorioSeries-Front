@@ -12,7 +12,7 @@ import { SerieEstatusService } from 'src/app/Services/serie-estatus.service';
 @Component({
   selector: 'app-proximos',
   templateUrl: './proximos.component.html',
-  styleUrls: ['./proximos.component.css']
+  styleUrls: ['./proximos.component.css'],
 })
 export class SProximosComponent implements OnInit, AfterViewInit {
   pageSize: number = environment.registrosPagina;
@@ -45,7 +45,7 @@ export class SProximosComponent implements OnInit, AfterViewInit {
   constructor(
     private service: SerieEstatusService,
     private alerta: AlertasService,
-    private funcion: FuncionesService,
+    public funciones: FuncionesService,
     public permiso: PermisosService,
   ) {}
 
@@ -106,6 +106,6 @@ export class SProximosComponent implements OnInit, AfterViewInit {
 
   export() {
     this.alerta.reporte(this.Archivo);
-    this.funcion.exportarExcel(this.Temporadas, this.Archivo);
+    this.funciones.exportarExcel(this.Temporadas, this.Archivo);
   }
 }

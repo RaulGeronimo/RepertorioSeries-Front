@@ -45,7 +45,7 @@ export class CProximosComponent implements OnInit, AfterViewInit {
   constructor(
     private service: CaricaturaEstatusService,
     private alerta: AlertasService,
-    private funcion: FuncionesService,
+    public funciones: FuncionesService,
     public permiso: PermisosService,
   ) {}
 
@@ -106,6 +106,6 @@ export class CProximosComponent implements OnInit, AfterViewInit {
 
   export() {
     this.alerta.reporte(this.Archivo);
-    this.funcion.exportarExcel(this.Temporadas, this.Archivo);
+    this.funciones.exportarExcel(this.Temporadas, this.Archivo);
   }
 }

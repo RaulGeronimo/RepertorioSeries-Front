@@ -27,7 +27,23 @@ export class AuthService {
     private router: Router,
   ) {
     this.verificarExpiracionInicial();
-    console.log(environment.apiUrl);
+    this.escucharCambiosEnOtrasPestañas();
+  }
+
+  private escucharCambiosEnOtrasPestañas() {
+    window.addEventListener('storage', (event) => {
+      if (event.key === null || (event.key === 'accessToken' && !event.newValue)) {
+        this.cerrarSesionPorOtraPestaña();
+      }
+    });
+  }
+
+  private cerrarSesionPorOtraPestaña() {
+    if (this.tokenCheckInterval) {
+      this.tokenCheckInterval.unsubscribe();
+      this.tokenCheckInterval = null;
+    }
+    this.router.navigate(['login']);
   }
 
   create(user: User) {
@@ -44,6 +60,7 @@ export class AuthService {
   //#region Metodos
   logout() {
     localStorage.clear();
+
     if (this.tokenCheckInterval) {
       this.tokenCheckInterval.unsubscribe();
       this.tokenCheckInterval = null;

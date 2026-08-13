@@ -52,8 +52,8 @@
 
           <!-- Productora -->
           <div class="card-body">
-            <textarea type="text" formControlName="Productora" [(ngModel)]="serie.productora"
-              placeholder="Productora:" class="form-control"
+            <textarea type="text" formControlName="Productora" [(ngModel)]="serie.productora" placeholder="Productora:"
+              class="form-control"
               [class.is-invalid]="form.get('Productora')?.invalid && form.get('Productora')?.touched"
               [class.is-valid]="form.get('Productora')?.valid" rows="2"></textarea>
 
@@ -123,7 +123,8 @@
 
   <div class="col-md-4 inicio-card">
     <div class="card card-body text-center">
-      <img [src]="serie.portada == '' ? '/assets/noImagen.png' : serie.portada" class="card-img-top">
+      <img [src]="serie.portada == '' ? '/assets/noImagen.png' : serie.portada" class="card-img-top"
+        (error)="funciones.imagenNoValida($event)">
       <h3 style="text-transform: uppercase;">
         {{serie.serieId}} - {{serie.nombre == '' ? 'Nombre de la Caricatura' : serie.nombre}}
       </h3>

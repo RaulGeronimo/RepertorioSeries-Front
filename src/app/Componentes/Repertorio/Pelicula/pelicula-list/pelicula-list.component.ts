@@ -52,7 +52,7 @@ export class PeliculaListComponent implements OnInit, AfterViewInit {
   constructor(
     private service: PeliculaService,
     private alerta: AlertasService,
-    private funcion: FuncionesService,
+    public funciones: FuncionesService,
     public permiso: PermisosService,
   ) {}
 
@@ -113,6 +113,6 @@ export class PeliculaListComponent implements OnInit, AfterViewInit {
 
   export() {
     this.alerta.reporte(this.Archivo);
-    this.funcion.exportarExcel(this.Peliculas, this.Archivo);
+    this.funciones.exportarExcel(this.Peliculas, this.Archivo);
   }
 }

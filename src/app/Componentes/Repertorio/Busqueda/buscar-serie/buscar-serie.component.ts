@@ -14,7 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-buscar-serie',
   templateUrl: './buscar-serie.component.html',
-  styleUrls: ['./buscar-serie.component.css']
+  styleUrls: ['./buscar-serie.component.css'],
 })
 export class BuscarSerieComponent implements OnInit, AfterViewInit {
   pageSize: number = environment.registrosPagina;
@@ -75,7 +75,7 @@ export class BuscarSerieComponent implements OnInit, AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private service: BusquedaService,
     private alerta: AlertasService,
-    private funcion: FuncionesService,
+    public funciones: FuncionesService,
     public permiso: PermisosService,
   ) {}
 
@@ -185,7 +185,7 @@ export class BuscarSerieComponent implements OnInit, AfterViewInit {
 
   export() {
     this.alerta.reporte(this.Archivo);
-    this.funcion.exportarExcelMultiple(
+    this.funciones.exportarExcelMultiple(
       [
         { nombre: 'Temporadas', data: this.Temporadas },
         { nombre: 'Películas', data: this.Peliculas },

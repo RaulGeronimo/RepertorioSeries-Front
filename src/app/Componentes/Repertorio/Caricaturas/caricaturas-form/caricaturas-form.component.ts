@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertasService } from 'src/app/Services/alertas.service';
+import { FuncionesService } from 'src/app/Shared/funciones';
 
 import { Caricatura } from 'src/app/Models/Caricatura';
 import { CaricaturaService } from 'src/app/Services/caricatura.service';
@@ -39,6 +40,7 @@ export class CaricaturasFormComponent implements OnInit {
     private fb: FormBuilder,
     private alerta: AlertasService,
     private navigationService: NavigationService,
+    public funciones: FuncionesService,
   ) {
     this.form = this.fb.group({
       Nombre: ['', Validators.required],

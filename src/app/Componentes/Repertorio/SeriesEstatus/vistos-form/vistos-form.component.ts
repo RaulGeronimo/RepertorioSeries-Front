@@ -16,7 +16,7 @@ import { TemporadasSerieService } from 'src/app/Services/temporadas-serie.servic
 @Component({
   selector: 'app-vistos-form',
   templateUrl: './vistos-form.component.html',
-  styleUrls: ['./vistos-form.component.css']
+  styleUrls: ['./vistos-form.component.css'],
 })
 export class SVistosFormComponent implements OnInit {
   form: FormGroup;
@@ -38,7 +38,7 @@ export class SVistosFormComponent implements OnInit {
   constructor(
     private service: SerieEstatusService,
     private router: Router,
-    private funciones: FuncionesService,
+    public funciones: FuncionesService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private alerta: AlertasService,

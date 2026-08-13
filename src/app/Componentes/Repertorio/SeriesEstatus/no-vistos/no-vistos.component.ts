@@ -13,7 +13,7 @@ import { SerieProximo } from 'src/app/Models/SerieEstatus';
 @Component({
   selector: 'app-no-vistos',
   templateUrl: './no-vistos.component.html',
-  styleUrls: ['./no-vistos.component.css']
+  styleUrls: ['./no-vistos.component.css'],
 })
 export class SNoVistosComponent implements OnInit, AfterViewInit {
   pageSize: number = environment.registrosPagina;
@@ -51,7 +51,7 @@ export class SNoVistosComponent implements OnInit, AfterViewInit {
   constructor(
     private service: SerieEstatusService,
     private alerta: AlertasService,
-    private funcion: FuncionesService,
+    public funciones: FuncionesService,
     public permiso: PermisosService,
   ) {}
 
@@ -133,6 +133,6 @@ export class SNoVistosComponent implements OnInit, AfterViewInit {
 
   export() {
     this.alerta.reporte(this.Archivo);
-    this.funcion.exportarExcel(this.Temporadas, this.Archivo);
+    this.funciones.exportarExcel(this.Temporadas, this.Archivo);
   }
 }

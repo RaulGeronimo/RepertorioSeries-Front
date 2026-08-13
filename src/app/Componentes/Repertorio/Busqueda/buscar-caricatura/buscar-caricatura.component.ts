@@ -75,7 +75,7 @@ export class BuscarCaricaturaComponent implements OnInit, AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private service: BusquedaService,
     private alerta: AlertasService,
-    private funcion: FuncionesService,
+    public funciones: FuncionesService,
     public permiso: PermisosService,
   ) {}
 
@@ -185,7 +185,7 @@ export class BuscarCaricaturaComponent implements OnInit, AfterViewInit {
 
   export() {
     this.alerta.reporte(this.Archivo);
-    this.funcion.exportarExcelMultiple(
+    this.funciones.exportarExcelMultiple(
       [
         { nombre: 'Temporadas', data: this.Temporadas },
         { nombre: 'Películas', data: this.Peliculas },

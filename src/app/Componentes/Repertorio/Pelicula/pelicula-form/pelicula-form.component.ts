@@ -55,14 +55,15 @@ export class PeliculaFormComponent implements OnInit {
 
   constructor(
     private service: PeliculaService,
-    private caricaturaService: CaricaturaService,
-    private serieService: SerieService,
-    private funciones: FuncionesService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private alerta: AlertasService,
-    private catalogoService: CatalogosService,
+    public funciones: FuncionesService,
     private navigationService: NavigationService,
+
+    private catalogoService: CatalogosService,
+    private caricaturaService: CaricaturaService,
+    private serieService: SerieService,
   ) {
     this.form = this.fb.group(
       {

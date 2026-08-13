@@ -43,11 +43,12 @@ export class TemporadaSerieFormComponent implements OnInit {
 
   constructor(
     private service: TemporadasSerieService,
-    private funciones: FuncionesService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private alerta: AlertasService,
+    public funciones: FuncionesService,
     private navigationService: NavigationService,
+
     private serieService: SerieService,
   ) {
     this.form = this.fb.group(
@@ -65,9 +66,7 @@ export class TemporadaSerieFormComponent implements OnInit {
         FechaFin: ['', null],
         Portada: [
           '',
-          [
-            Validators.pattern('(https?:\\/\\/.*\\.(?:png|jpg|jpeg|webp))')
-          ],
+          [Validators.pattern('(https?:\\/\\/.*\\.(?:png|jpg|jpeg|webp))')],
         ],
       },
       {
@@ -83,10 +82,22 @@ export class TemporadaSerieFormComponent implements OnInit {
   //#region Fechas
   setDefaultDates() {
     const fechaActual: Date = new Date();
-    const primerDiaMes: Date = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1);
-    const ultimoDiaMes: Date = new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 1, 0);
-    const primerDiaMesFormato: string = primerDiaMes.toISOString().split('T')[0];
-    const ultimoDiaMesFormato: string = ultimoDiaMes.toISOString().split('T')[0];
+    const primerDiaMes: Date = new Date(
+      fechaActual.getFullYear(),
+      fechaActual.getMonth(),
+      1,
+    );
+    const ultimoDiaMes: Date = new Date(
+      fechaActual.getFullYear(),
+      fechaActual.getMonth() + 1,
+      0,
+    );
+    const primerDiaMesFormato: string = primerDiaMes
+      .toISOString()
+      .split('T')[0];
+    const ultimoDiaMesFormato: string = ultimoDiaMes
+      .toISOString()
+      .split('T')[0];
     this.temporada.fechaInicio = primerDiaMesFormato;
     //this.temporada.FechaFin = ultimoDiaMesFormato;
   }
@@ -121,8 +132,10 @@ export class TemporadaSerieFormComponent implements OnInit {
 
   add() {
     this.temporada.fechaFin = this.temporada.fechaFin || null;
-    this.temporada.calificacion = this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
-    this.temporada.capitulos = this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
+    this.temporada.calificacion =
+      this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
+    this.temporada.capitulos =
+      this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
     this.service.create(this.temporada).subscribe(
       (res) => {
         this.regresar();
@@ -144,8 +157,10 @@ export class TemporadaSerieFormComponent implements OnInit {
 
   actualiza() {
     this.temporada.fechaFin = this.temporada.fechaFin || null;
-    this.temporada.calificacion = this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
-    this.temporada.capitulos = this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
+    this.temporada.calificacion =
+      this.temporada.calificacion === 0 ? null : this.temporada.calificacion;
+    this.temporada.capitulos =
+      this.temporada.capitulos === 0 ? null : this.temporada.capitulos;
     const params = this.activatedRoute.snapshot.params;
     this.service.update(params['id'], this.temporada).subscribe(
       (res) => {
@@ -179,12 +194,9 @@ export class TemporadaSerieFormComponent implements OnInit {
   }
 
   getNombreSerie(id: number): string {
-    if (!this.Series || this.Series.length === 0)
-      return 'Series';
+    if (!this.Series || this.Series.length === 0) return 'Series';
 
-    const nombre = this.Series.find(
-      (serie: any) => +serie.serieId === +id,
-    );
+    const nombre = this.Series.find((serie: any) => +serie.serieId === +id);
     return nombre ? nombre.nombre : 'Nombre de la Serie no encontrada';
   }
 
@@ -195,10 +207,7 @@ export class TemporadaSerieFormComponent implements OnInit {
   //#region Refresh
   refrescarSerie() {
     this.obtenerSerie();
-    this.alerta.successtroast(
-      'Lista de series actualizada',
-      'Actualizada',
-    );
+    this.alerta.successtroast('Lista de series actualizada', 'Actualizada');
   }
   //#endregion Refresh
 }

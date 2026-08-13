@@ -11,6 +11,7 @@ import {
 
 import { CaricaturaSiguiendo } from 'src/app/Models/CaricaturaEstatus';
 import { CaricaturaEstatusService } from 'src/app/Services/caricatura-estatus.service';
+
 import { TemporadasCaricaturaService } from 'src/app/Services/temporadas-caricatura.service';
 
 @Component({
@@ -38,10 +39,11 @@ export class CVistosFormComponent implements OnInit {
   constructor(
     private service: CaricaturaEstatusService,
     private router: Router,
-    private funciones: FuncionesService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private alerta: AlertasService,
+    public funciones: FuncionesService,
+
     private temporadaService: TemporadasCaricaturaService,
   ) {
     this.form = this.fb.group(
