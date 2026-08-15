@@ -56,8 +56,6 @@ export class LoginComponent implements OnInit {
           res.refreshToken,
           res.expiraEn,
         );
-        this.userService.guardarPermisos(res.permisos);
-        this.userService.guardarUsuario(this.user.usuario!);
 
         this.router.navigate(['repertorio/']);
         this.alerta.successtroast(

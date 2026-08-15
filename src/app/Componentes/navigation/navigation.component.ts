@@ -3,7 +3,6 @@ import { AlertasService } from 'src/app/Services/alertas.service';
 import { AuthService } from 'src/app/Services/auth.service';
 import { PermisosService } from 'src/app/Services/permisos.service';
 import { Seccion } from 'src/app/enum/seccion.enum';
-import { Rol } from 'src/app/enum/Rol.enum';
 import { environment } from 'src/environments/environment';
 import {
   NavDropdownItem,
@@ -11,6 +10,7 @@ import {
   NavItem,
   NavLinkItem,
 } from 'src/app/Models/NavItem';
+import { User } from 'src/app/Models/User';
 
 @Component({
   selector: 'app-navigation',
@@ -20,7 +20,6 @@ import {
 export class NavigationComponent {
   //#region Permisos
   Seccion = Seccion;
-  Rol = Rol;
   proyecto = environment.proyecto;
   URL_Anime = environment.urlAnime;
   URL_Musica = environment.urlMusica;
@@ -106,16 +105,14 @@ export class NavigationComponent {
   ];
   //#endregion Otros Proyectos
 
-  user: any;
-  rol: any;
+  user: User;
 
   constructor(
     private userService: AuthService,
     public permiso: PermisosService,
     private alerta: AlertasService,
   ) {
-    this.user = this.userService.obtenerUsuario();
-    this.rol = this.userService.getRolId();
+    this.user = this.userService.obtenerDatosUsuario() ?? { usuario: '' };
   }
 
   get otrosProyectosFiltrados() {

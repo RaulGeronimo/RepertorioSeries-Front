@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Permiso } from '../Models/Permisos';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PermisosService {
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
-  private get permisos(): Permiso[] {
-    const permisos = localStorage.getItem('permisos');
-    return permisos ? JSON.parse(permisos) : [];
+  private get permisos() {
+    return this.authService.obtenerPermisos();
   }
 
   puedeVer(seccionId: number): boolean {

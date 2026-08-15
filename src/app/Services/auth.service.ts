@@ -2,16 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { User } from '../Models/User';
+import { Permiso } from '../Models/Permisos';
 import { Observable, interval, Subscription } from 'rxjs';
 import { AlertasService } from './alertas.service';
 import { Router } from '@angular/router';
-import { Permiso } from '../Models/Permisos';
+import { jwtDecode } from 'jwt-decode';
 
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
   expiraEn: string;
   permisos: Permiso[];
+}
+
+interface JwtPayload {
+  Usuario: string;
+  Permisos: string[];
 }
 
 @Injectable({
@@ -32,7 +38,10 @@ export class AuthService {
 
   private escucharCambiosEnOtrasPestañas() {
     window.addEventListener('storage', (event) => {
-      if (event.key === null || (event.key === 'accessToken' && !event.newValue)) {
+      if (
+        event.key === null ||
+        (event.key === 'accessToken' && !event.newValue)
+      ) {
         this.cerrarSesionPorOtraPestaña();
       }
     });
@@ -83,15 +92,38 @@ export class AuthService {
     return !!this.obtenerToken();
   }
 
-  guardarPermisos(permisos: Permiso[]) {
-    localStorage.setItem('permisos', JSON.stringify(permisos));
-    localStorage.setItem('usuarioId', permisos[0].usuarioId.toString());
-    localStorage.setItem('rolId', permisos[0].rolId.toString());
+  //#region Permisos
+  obtenerPermisos(): Permiso[] {
+    const token = this.obtenerToken();
+    if (!token) return [];
+
+    try {
+      const payload = jwtDecode<JwtPayload>(token);
+      return this.parsePermisos(payload.Permisos ?? []);
+    } catch {
+      return [];
+    }
   }
 
-  obtenerPermisos(): Permiso[] {
-    const permisos = localStorage.getItem('permisos');
-    return permisos ? JSON.parse(permisos) : [];
+  private parsePermisos(raw: string[]): Permiso[] {
+    return raw.map((item) => {
+      const [seccionIdStr, seccion, propsStr] = item.split('|');
+      const props: Record<string, boolean> = {};
+
+      propsStr.split(',').forEach((pair) => {
+        const [key, value] = pair.split(':');
+        props[key.trim()] = value.trim().toLowerCase() === 'true';
+      });
+
+      return {
+        seccionId: Number(seccionIdStr),
+        seccion: seccion.trim(),
+        puedeCrear: props['crear'] ?? false,
+        puedeEditar: props['editar'] ?? false,
+        puedeEliminar: props['eliminar'] ?? false,
+        puedeVer: props['ver'] ?? false,
+      } as Permiso;
+    });
   }
 
   tienePermiso(seccion: string, permiso: keyof Permiso): boolean {
@@ -99,24 +131,7 @@ export class AuthService {
     const seccionEncontrada = permisos.find((p) => p.seccion === seccion);
     return !!seccionEncontrada?.[permiso];
   }
-
-  guardarUsuario(usuario: string) {
-    localStorage.setItem('usuario', usuario);
-  }
-
-  obtenerUsuario(): string | null {
-    return localStorage.getItem('usuario');
-  }
-
-  getUsuarioId(): number | null {
-    const id = localStorage.getItem('usuarioId');
-    return id ? +id : null; // convierte el string a número
-  }
-
-  getRolId(): number | null {
-    const id = localStorage.getItem('rolId');
-    return id ? +id : null; // convierte el string a número
-  }
+  //#endregion Permisos
 
   private iniciarChequeoExpiracion() {
     if (this.tokenCheckInterval) {
@@ -179,8 +194,6 @@ export class AuthService {
       .subscribe({
         next: (res) => {
           this.guardarTokens(res.accessToken, res.refreshToken, res.expiraEn);
-          if (res.permisos) this.guardarPermisos(res.permisos);
-
           this.alerta.mostrarAlertaSimple(
             'Sesión renovada',
             'Tu sesión ha sido extendida.',
@@ -218,4 +231,20 @@ export class AuthService {
     }
   }
   //#endregion Metodos
+
+  //#region Extraer datos Usuario
+  obtenerDatosUsuario(): User | null {
+    const token = this.obtenerToken();
+    if (!token) return null;
+
+    try {
+      const payload = jwtDecode<JwtPayload>(token);
+      return {
+        usuario: payload.Usuario,
+      };
+    } catch {
+      return null;
+    }
+  }
+  //#endregion Extraer datos Usuario
 }

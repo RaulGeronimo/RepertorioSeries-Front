@@ -30,8 +30,6 @@ export class PerfilComponent implements OnInit, AfterViewInit {
   TotalCorrectos: number = 0;
   TotalError: number = 0;
 
-  usuarioId: number = 0;
-
   // Gráficas
   actividadChart: any;
   actividadChartOptions: any;
@@ -75,10 +73,9 @@ export class PerfilComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.usuarioId = this.service.getUsuarioId() ?? 0;
     this.obtenerDatos();
 
-    this.userService.getUsuario(this.usuarioId).subscribe(
+    this.userService.getUsuario().subscribe(
       (res) => {
         this.perfil = res;
         this.actualizarActividadChart();

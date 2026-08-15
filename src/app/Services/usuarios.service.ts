@@ -16,8 +16,8 @@ export class UsuariosService {
     return this.http.get<any[]>(`${this.API_URL}`);
   }
 
-  getUsuario(usuarioId: number) {
-    return this.http.get(`${this.API_URL}/${usuarioId}`);
+  getUsuario() {
+    return this.http.get(`${this.API_URL}/usuario`);
   }
 
   update(usuarioId: number, usuario: User): Observable<any> {
