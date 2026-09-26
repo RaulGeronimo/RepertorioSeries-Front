@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NavigationService {
-  private lastValidUrl: string = '/repertorio';
+  private history: string[] = ['/repertorio'];
 
   private excludedRoutes = [
     '/agregar',
@@ -21,29 +21,42 @@ export class NavigationService {
     this.router.events
       .pipe(
         filter(
-          (event): event is NavigationStart => event instanceof NavigationStart,
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
         ),
       )
       .subscribe((event) => {
+        const url = event.urlAfterRedirects;
         const shouldExclude = this.excludedRoutes.some((route) =>
-          event.url.includes(route),
+          url.includes(route),
         );
 
-        if (!shouldExclude) {
-          this.lastValidUrl = event.url;
+        if (shouldExclude) return;
+
+        const top = this.history[this.history.length - 1];
+        if (url !== top) {
+          this.history.push(url);
         }
       });
   }
 
   goBack(): void {
-    this.router.navigateByUrl(this.lastValidUrl);
+    const currentUrl = this.router.url;
+    const top = this.history[this.history.length - 1];
+
+    if (currentUrl === top) {
+      this.history.pop();
+      const previous = this.history[this.history.length - 1] ?? '/repertorio';
+      this.router.navigateByUrl(previous);
+    } else {
+      this.router.navigateByUrl(top ?? '/repertorio');
+    }
   }
 
   getLastUrl(): string {
-    return this.lastValidUrl;
+    return this.history[this.history.length - 1];
   }
 
   clear(): void {
-    this.lastValidUrl = '/repertorio';
+    this.history = ['/repertorio'];
   }
 }
